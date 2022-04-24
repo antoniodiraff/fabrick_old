@@ -1,0 +1,118 @@
+<p-toast position="top-center"></p-toast>
+<p-card class="transaction-details details" [hidden]=(loading)>
+
+    <p-toolbar styleClass="mb-4">
+        <ng-template pTemplate="left">
+            <i id="back-icon" class="pi pi-chevron-circle-left mr-3" style="font-size: 1.8rem;cursor: pointer;" (click)="back()" pTooltip="Indietro" tooltipPosition="top"></i>
+            <h2>Transaction: {{transaction.id}}</h2>
+            <i id="status-icon" class="pi pi-lock ml-2" style="font-size: 1.4rem;"></i>
+        </ng-template>
+        <ng-template pTemplate="right">
+            <div class="d-flex flex-wrap">
+                <button pButton pRipple label="Modifica" icon="pi pi-pencil" class="p-button-info mr-2 mb-2" (click)="enableEdit()" [hidden]=(edit) *ngIf="secCheck('UPDATE')"></button>
+                <button pButton pRipple label="Annulla" icon="pi pi-times" class="p-button-info mr-2 mb-2" (click)="disableEdit()" [hidden]=(!edit)></button>
+                <button pButton pRipple label="Salva" icon="pi pi-save" class="p-button-success mr-2 mb-2" (click)="save()" [hidden]=(!edit) *ngIf="secCheck('UPDATE')"></button>
+                <button pButton pRipple label="Elimina" icon="pi pi-trash" class="p-button-danger mr-2 mb-2" (click)="deleteElement(transaction)" [hidden]=(!edit) *ngIf="secCheck('DELETE')"></button>
+            </div>
+        </ng-template>
+    </p-toolbar>
+    
+    <div class="p-fluid formgrid grid">
+        
+        <div class="field col-12 md:col-12 lg:col-12 xl:col-6">
+            <label for="transactionId">TransactionId</label>
+            <p-inputNumber id="transactionId" inputId="integeronly" [(ngModel)]="transaction.transactionId" [disabled]="!edit" ></p-inputNumber>
+        </div>
+
+        <div class="field col-12 md:col-12 lg:col-12 xl:col-6">
+            <label for="operationId">OperationId</label>
+            <p-inputNumber id="operationId" inputId="integeronly" [(ngModel)]="transaction.operationId" [disabled]="!edit" ></p-inputNumber>
+        </div>
+
+        <div class="field col-12 md:col-12 lg:col-12 xl:col-6">
+            <label for="accountingDate">AccountingDate</label>
+            <p-calendar inputId="accountingDate" [(ngModel)]="transaction.accountingDate" appendTo="body" [disabled]="!edit" ></p-calendar>
+        </div>
+
+        <div class="field col-12 md:col-12 lg:col-12 xl:col-6">
+            <label for="valueDate">ValueDate</label>
+            <p-calendar inputId="valueDate" [(ngModel)]="transaction.valueDate" appendTo="body" [disabled]="!edit" ></p-calendar>
+        </div>
+
+        <div class="field col-12 md:col-12 lg:col-12 xl:col-6">
+            <label for="amount">Amount</label>
+            <input id="amount" type="text" pInputText [(ngModel)]="transaction.amount" [disabled]="!edit" > 
+        </div>
+
+        <div class="field col-12 md:col-12 lg:col-12 xl:col-6">
+            <label for="currency">Currency</label>
+            <input id="currency" type="text" pInputText [(ngModel)]="transaction.currency" [disabled]="!edit"  > 
+        </div>
+
+        <div class="field col-12 md:col-12 lg:col-12 xl:col-6">
+            <label for="description">Description</label>
+            <input id="description" type="text" pInputText [(ngModel)]="transaction.description" [disabled]="!edit"  > 
+        </div>
+
+    </div>
+    <p-tabView>
+
+<p-tabPanel header="Type">
+    <button pButton pRipple [hidden]="!edit" icon="pi pi-trash" class="p-button-rounded p-button-primary p-button-text" (click)="setType()" style="float:right" pTooltip="Elimina" tooltipPosition="left"></button>
+    <div *ngIf="!transaction.type && (!edit || typeDeleted)">Nesunn elemento</div>
+    <div class="p-fluid formgrid grid" *ngIf="transaction.type || (edit && !typeDeleted)">
+        <div class="field col-12 md:col-12 lg:col-12 xl:col-6">
+            <label for="id">Id</label>
+            <input id="id" type="text" pInputText [(ngModel)]="transaction.type.enumeration" [disabled]="true" [hidden]="edit"> 
+            <p-dropdown [options]="types" [(ngModel)]="selectedType" [filter]="true" filterBy="enumeration" [showClear]="true" placeholder="Select a Type" [hidden]="!edit">
+                <ng-template pTemplate="selectedItem">
+                    <div class="country-item country-item-value"  *ngIf="selectedType">
+                        <div>{{selectedType.enumeration}}</div>
+                    </div>
+                </ng-template>
+                <ng-template let-type pTemplate="item">
+                    <div class="country-item">
+                        <div>{{type.enumeration}}</div>
+                    </div>
+                </ng-template>
+            </p-dropdown>
+        </div>
+    
+        <div class="field col-12 md:col-12 lg:col-12 xl:col-6" *ngIf="!edit">
+            <label for="value">Value</label>
+            <input id="value" type="text" pInputText [(ngModel)]="transaction.type.value" [disabled]="true"> 
+        </div>
+    </div>
+</p-tabPanel>
+
+ 
+    </p-tabView>
+
+    <p-confirmDialog [style]="{width: '550px'}" acceptLabel="Si"></p-confirmDialog>
+
+</p-card>
+
+<p-card [hidden]="!loading">
+    <div class="skeleton" >
+        <div class="grid formgrid">
+            <div class="field col-12 md:col-12 lg:col-12 xl:col-6">
+                <p-skeleton width="10rem" height="1rem" styleClass="mb-4"></p-skeleton>
+                <p-skeleton height="2rem" styleClass="mb-3"></p-skeleton>
+                <p-skeleton height="2rem"  styleClass="mb-3"></p-skeleton>
+                <p-skeleton height="2rem" styleClass="mb-3"></p-skeleton>
+                <p-skeleton height="2rem"  styleClass="mb-3"></p-skeleton>
+                <p-skeleton height="2rem" styleClass="mb-3"></p-skeleton>
+                <p-skeleton height="2rem"  ></p-skeleton>
+            </div>
+            <div class="field col-12 md:col-12 lg:col-12 xl:col-6">
+                <p-skeleton width="10rem" height="1rem" styleClass="mb-4"></p-skeleton>
+                <p-skeleton height="2rem" styleClass="mb-3"></p-skeleton>
+                <p-skeleton height="2rem"  styleClass="mb-3"></p-skeleton>
+                <p-skeleton height="2rem" styleClass="mb-3"></p-skeleton>
+                <p-skeleton height="2rem"  styleClass="mb-3"></p-skeleton>
+                <p-skeleton height="2rem" styleClass="mb-3"></p-skeleton>
+                <p-skeleton height="2rem"  ></p-skeleton>
+            </div>
+        </div>
+    </div>
+</p-card>

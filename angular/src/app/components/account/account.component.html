@@ -1,0 +1,152 @@
+<p-toast position="top-center"></p-toast>
+
+<div class="card" *ngIf="!errorCode">
+    <p-toolbar styleClass="p-mb-4">
+        <ng-template pTemplate="left">
+            <button pButton pRipple label="Nuovo" icon="pi pi-plus" class="p-button-success mr-2" (click)="openNew()" pTooltip="Crea nuovo" tooltipPosition="bottom" *ngIf="secCheck('CREATE')"></button>
+            <button pButton pRipple label="" icon="pi pi-trash" class="p-button-danger" (click)="deleteSelectedElements()" [disabled]="!selectedAccounts || !selectedAccounts.length" pTooltip="Elimina selezionati" tooltipPosition="bottom" *ngIf="secCheck('DELETE_ALL')"></button>
+        </ng-template>
+
+        <ng-template pTemplate="right">
+            <!--<p-fileUpload mode="basic" accept="image/*" [maxFileSize]="1000000" label="Import" chooseLabel="Import" class="mr-2 p-d-inline-block"></p-fileUpload>-->
+            <button pButton pRipple label="Pdf" icon="pi pi-file-pdf" class="p-button-info" (click)="downloadReport('pdf')" pTooltip="Scarica Pdf" tooltipPosition="bottom" *ngIf="secCheck('REPORT_PDF')"></button>
+            <button pButton pRipple label="Xls" icon="pi pi-file-excel" class="p-button-info ml-2" (click)="downloadReport('xls')" pTooltip="Scarica Xls" tooltipPosition="bottom" *ngIf="secCheck('REPORT_XLS')"></button>
+            <button pButton pRipple label="Csv" icon="pi pi-file" class="p-button-info ml-2" (click)="downloadReport('csv')" pTooltip="Scarica Csv" tooltipPosition="bottom" *ngIf="secCheck('REPORT_CSV')"></button>
+        </ng-template>
+    </p-toolbar>
+
+    <p-table #dt [value]="accounts" [rows]="defaultRows" [paginator]="true"
+        [lazy]="true" (onLazyLoad)="loadListEvent($event)"  [totalRecords]="totalRecords" [loading]="loading"
+        [rowsPerPageOptions]="[10,25,50,100]" [(selection)]="selectedAccounts" [rowHover]="true" dataKey="id"
+        currentPageReportTemplate="Elementi da {first} a {last} di {totalRecords} elementi totali" [showCurrentPageReport]="true">
+        <ng-template pTemplate="caption">
+            <div class="p-d-flex p-ai-center p-jc-between">
+                <h3 class="mb-2">Gestione Account</h3>
+                <span class="p-input-icon-left">
+                    <i class="pi pi-search"></i>
+                    <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Cerca..." />
+                </span>
+            </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+            <tr>
+                <th style="width: 3rem">
+                    <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                </th>
+                <th pSortableColumn="accountId">AccountId <p-sortIcon field="accountId"></p-sortIcon></th>
+                <th pSortableColumn="iban">Iban <p-sortIcon field="iban"></p-sortIcon></th>
+                <th pSortableColumn="abiCode">AbiCode <p-sortIcon field="abiCode"></p-sortIcon></th>
+                <th pSortableColumn="cabCode">CabCode <p-sortIcon field="cabCode"></p-sortIcon></th>
+                <th pSortableColumn="countryCode">CountryCode <p-sortIcon field="countryCode"></p-sortIcon></th>
+                <th pSortableColumn="internationalCin">InternationalCin <p-sortIcon field="internationalCin"></p-sortIcon></th>
+                <th pSortableColumn="nationalCin">NationalCin <p-sortIcon field="nationalCin"></p-sortIcon></th>
+                <th pSortableColumn="account">Account <p-sortIcon field="account"></p-sortIcon></th>
+                <th pSortableColumn="alias">Alias <p-sortIcon field="alias"></p-sortIcon></th>
+                <th pSortableColumn="productName">ProductName <p-sortIcon field="productName"></p-sortIcon></th>
+                <th pSortableColumn="holderName">HolderName <p-sortIcon field="holderName"></p-sortIcon></th>
+                <th pSortableColumn="activatedDate">ActivatedDate <p-sortIcon field="activatedDate"></p-sortIcon></th>
+                <th pSortableColumn="currency">Currency <p-sortIcon field="currency"></p-sortIcon></th>
+
+                <th></th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-account>
+            <tr>
+                <td>
+                    <p-tableCheckbox [value]="account"></p-tableCheckbox>
+                </td>
+                <td>{{account.accountId}}</td>
+                <td>{{account.iban}}</td>
+                <td>{{account.abiCode}}</td>
+                <td>{{account.cabCode}}</td>
+                <td>{{account.countryCode}}</td>
+                <td>{{account.internationalCin}}</td>
+                <td>{{account.nationalCin}}</td>
+                <td>{{account.account}}</td>
+                <td>{{account.alias}}</td>
+                <td>{{account.productName}}</td>
+                <td>{{account.holderName}}</td>
+                <td>{{account.activatedDate}}</td>
+                <td>{{account.currency}}</td>
+
+                <td>
+                	<button pButton pRipple icon="pi pi-eye" class="p-button-text p-button-primary mr-2" (click)="detailElement(account)" pTooltip="Mostra dettagli" tooltipPosition="top" *ngIf="secCheck('BY_ID')"></button>
+                    <button pButton pRipple icon="pi pi-pencil" class="p-button-text p-button-primary mr-2" (click)="editElement(account)" pTooltip="Modifica" tooltipPosition="top" *ngIf="secCheck('UPDATE')"></button>
+                    <button pButton pRipple icon="pi pi-trash" class="p-button-text p-button-primary" (click)="deleteElement(account)" pTooltip="Elimina" tooltipPosition="top" *ngIf="secCheck('DELETE')"></button>
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="summary">
+            <div class="p-d-flex p-ai-center p-jc-between">
+                Elementi totali: {{totalRecords}}
+            </div>
+        </ng-template>
+    </p-table>
+</div>
+
+<p-dialog [(visible)]="accountDialog" [style]="{width: '650px'}" header="Dettagli Account" [modal]="true" styleClass="p-fluid">
+    <ng-template pTemplate="content">
+        <div class="field">
+            <label for="accountId">AccountId</label>
+            <p-inputNumber id="accountId" inputId="integeronly" [(ngModel)]="account.accountId"  ></p-inputNumber>
+        </div>
+        <div class="field">
+            <label for="iban">Iban</label>
+            <input id="iban" type="text" pInputText [(ngModel)]="account.iban"   autofocus> 
+        </div>
+        <div class="field">
+            <label for="abiCode">AbiCode</label>
+            <input id="abiCode" type="text" pInputText [(ngModel)]="account.abiCode"   > 
+        </div>
+        <div class="field">
+            <label for="cabCode">CabCode</label>
+            <input id="cabCode" type="text" pInputText [(ngModel)]="account.cabCode"   > 
+        </div>
+        <div class="field">
+            <label for="countryCode">CountryCode</label>
+            <input id="countryCode" type="text" pInputText [(ngModel)]="account.countryCode"   > 
+        </div>
+        <div class="field">
+            <label for="internationalCin">InternationalCin</label>
+            <input id="internationalCin" type="text" pInputText [(ngModel)]="account.internationalCin"   > 
+        </div>
+        <div class="field">
+            <label for="nationalCin">NationalCin</label>
+            <input id="nationalCin" type="text" pInputText [(ngModel)]="account.nationalCin"   > 
+        </div>
+        <div class="field">
+            <label for="account">Account</label>
+            <input id="account" type="text" pInputText [(ngModel)]="account.account"   > 
+        </div>
+        <div class="field">
+            <label for="alias">Alias</label>
+            <input id="alias" type="text" pInputText [(ngModel)]="account.alias"   > 
+        </div>
+        <div class="field">
+            <label for="productName">ProductName</label>
+            <input id="productName" type="text" pInputText [(ngModel)]="account.productName"   > 
+        </div>
+        <div class="field">
+            <label for="holderName">HolderName</label>
+            <input id="holderName" type="text" pInputText [(ngModel)]="account.holderName"   > 
+        </div>
+        <div class="field">
+            <label for="activatedDate">ActivatedDate</label>
+            <p-calendar inputId="activatedDate" [(ngModel)]="account.activatedDate" appendTo="body"  ></p-calendar>
+        </div>
+        <div class="field">
+            <label for="currency">Currency</label>
+            <input id="currency" type="text" pInputText [(ngModel)]="account.currency"   > 
+        </div>
+
+    </ng-template>
+    
+    <ng-template pTemplate="footer">
+        <button pButton pRipple label="Annulla" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
+        <button pButton pRipple label="Salva" icon="pi pi-check" class="p-button-text" (click)="saveElement()" *ngIf="secCheck('CREATE')"></button>
+    </ng-template>
+</p-dialog>
+
+
+<p-confirmDialog [style]="{width: '550px'}" acceptLabel="Si"></p-confirmDialog>
+<app-error-page *ngIf="errorCode" [inputCode]="errorCode"></app-error-page>

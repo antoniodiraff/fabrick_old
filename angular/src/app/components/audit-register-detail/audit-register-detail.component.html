@@ -1,0 +1,130 @@
+<p-toast position="top-center"></p-toast>
+<p-card class="audit-register-details details" [hidden]=(loading)>
+
+    <p-toolbar styleClass="mb-4">
+        <ng-template pTemplate="left">
+            <i id="back-icon" class="pi pi-chevron-circle-left mr-3" style="font-size: 1.8rem;cursor: pointer;" (click)="back()" pTooltip="Indietro" tooltipPosition="top"></i>
+            <h2>AuditRegister: {{auditRegister.id}}</h2>
+            <i id="status-icon" class="pi pi-lock ml-2" style="font-size: 1.4rem;"></i>
+        </ng-template>
+        <ng-template pTemplate="right">
+            <div class="d-flex flex-wrap">
+                <button pButton pRipple label="Modifica" icon="pi pi-pencil" class="p-button-info mr-2 mb-2" (click)="enableEdit()" [hidden]=(edit) *ngIf="secCheck('UPDATE')"></button>
+                <button pButton pRipple label="Annulla" icon="pi pi-times" class="p-button-info mr-2 mb-2" (click)="disableEdit()" [hidden]=(!edit)></button>
+                <button pButton pRipple label="Salva" icon="pi pi-save" class="p-button-success mr-2 mb-2" (click)="save()" [hidden]=(!edit) *ngIf="secCheck('UPDATE')"></button>
+                <button pButton pRipple label="Elimina" icon="pi pi-trash" class="p-button-danger mr-2 mb-2" (click)="deleteElement(auditRegister)" [hidden]=(!edit) *ngIf="secCheck('DELETE')"></button>
+            </div>
+        </ng-template>
+    </p-toolbar>
+    
+    <div class="p-fluid formgrid grid">
+        
+        <div class="field col-12 md:col-12 lg:col-12 xl:col-6">
+            <label for="auditId">AuditId</label>
+            <p-inputNumber id="auditId" inputId="integeronly" [(ngModel)]="auditRegister.auditId" [disabled]="!edit" ></p-inputNumber>
+        </div>
+
+        <div class="field col-12 md:col-12 lg:col-12 xl:col-6">
+            <label for="requestDate">RequestDate</label>
+            <p-calendar inputId="requestDate" [(ngModel)]="auditRegister.requestDate" appendTo="body" [disabled]="!edit" ></p-calendar>
+        </div>
+
+        <div class="field col-12 md:col-12 lg:col-12 xl:col-6">
+            <label for="operation">Operation</label>
+            <input id="operation" type="text" pInputText [(ngModel)]="auditRegister.operation" [disabled]="!edit"  > 
+        </div>
+
+    </div>
+    <p-tabView>
+
+<p-tabPanel header="Account">
+    <button pButton pRipple [hidden]="!edit" icon="pi pi-trash" class="p-button-rounded p-button-primary p-button-text" (click)="setAccount()" style="float:right" pTooltip="Elimina" tooltipPosition="left"></button>
+    <div *ngIf="!auditRegister.account && (!edit || accountDeleted)">Nesunn elemento</div>
+    <div class="p-fluid formgrid grid" *ngIf="auditRegister.account || (edit && !accountDeleted)">
+        <div class="field col-12 md:col-12 lg:col-12 xl:col-6">
+            <label for="id">Id</label>
+            <input id="id" type="text" pInputText [(ngModel)]="auditRegister.account.accountId" [disabled]="true" [hidden]="edit"> 
+            <p-dropdown [options]="accounts" [(ngModel)]="selectedAccount" [filter]="true" filterBy="accountId" [showClear]="true" placeholder="Select a Account" [hidden]="!edit">
+                <ng-template pTemplate="selectedItem">
+                    <div class="country-item country-item-value"  *ngIf="selectedAccount">
+                        <div>{{selectedAccount.accountId}}</div>
+                    </div>
+                </ng-template>
+                <ng-template let-account pTemplate="item">
+                    <div class="country-item">
+                        <div>{{account.accountId}}</div>
+                    </div>
+                </ng-template>
+            </p-dropdown>
+        </div>
+    
+        <div class="field col-12 md:col-12 lg:col-12 xl:col-6" *ngIf="!edit">
+            <label for="iban">Iban</label>
+            <input id="iban" type="text" pInputText [(ngModel)]="auditRegister.account.iban" [disabled]="true"> 
+        </div>        <div class="field col-12 md:col-12 lg:col-12 xl:col-6" *ngIf="!edit">
+            <label for="abiCode">AbiCode</label>
+            <input id="abiCode" type="text" pInputText [(ngModel)]="auditRegister.account.abiCode" [disabled]="true"> 
+        </div>        <div class="field col-12 md:col-12 lg:col-12 xl:col-6" *ngIf="!edit">
+            <label for="cabCode">CabCode</label>
+            <input id="cabCode" type="text" pInputText [(ngModel)]="auditRegister.account.cabCode" [disabled]="true"> 
+        </div>        <div class="field col-12 md:col-12 lg:col-12 xl:col-6" *ngIf="!edit">
+            <label for="countryCode">CountryCode</label>
+            <input id="countryCode" type="text" pInputText [(ngModel)]="auditRegister.account.countryCode" [disabled]="true"> 
+        </div>        <div class="field col-12 md:col-12 lg:col-12 xl:col-6" *ngIf="!edit">
+            <label for="internationalCin">InternationalCin</label>
+            <input id="internationalCin" type="text" pInputText [(ngModel)]="auditRegister.account.internationalCin" [disabled]="true"> 
+        </div>        <div class="field col-12 md:col-12 lg:col-12 xl:col-6" *ngIf="!edit">
+            <label for="nationalCin">NationalCin</label>
+            <input id="nationalCin" type="text" pInputText [(ngModel)]="auditRegister.account.nationalCin" [disabled]="true"> 
+        </div>        <div class="field col-12 md:col-12 lg:col-12 xl:col-6" *ngIf="!edit">
+            <label for="account">Account</label>
+            <input id="account" type="text" pInputText [(ngModel)]="auditRegister.account.account" [disabled]="true"> 
+        </div>        <div class="field col-12 md:col-12 lg:col-12 xl:col-6" *ngIf="!edit">
+            <label for="alias">Alias</label>
+            <input id="alias" type="text" pInputText [(ngModel)]="auditRegister.account.alias" [disabled]="true"> 
+        </div>        <div class="field col-12 md:col-12 lg:col-12 xl:col-6" *ngIf="!edit">
+            <label for="productName">ProductName</label>
+            <input id="productName" type="text" pInputText [(ngModel)]="auditRegister.account.productName" [disabled]="true"> 
+        </div>        <div class="field col-12 md:col-12 lg:col-12 xl:col-6" *ngIf="!edit">
+            <label for="holderName">HolderName</label>
+            <input id="holderName" type="text" pInputText [(ngModel)]="auditRegister.account.holderName" [disabled]="true"> 
+        </div>        <div class="field col-12 md:col-12 lg:col-12 xl:col-6" *ngIf="!edit">
+            <label for="activatedDate">ActivatedDate</label>
+            <input id="activatedDate" type="text" pInputText [(ngModel)]="auditRegister.account.activatedDate" [disabled]="true"> 
+        </div>        <div class="field col-12 md:col-12 lg:col-12 xl:col-6" *ngIf="!edit">
+            <label for="currency">Currency</label>
+            <input id="currency" type="text" pInputText [(ngModel)]="auditRegister.account.currency" [disabled]="true"> 
+        </div>
+    </div>
+</p-tabPanel>
+ 
+    </p-tabView>
+
+    <p-confirmDialog [style]="{width: '550px'}" acceptLabel="Si"></p-confirmDialog>
+
+</p-card>
+
+<p-card [hidden]="!loading">
+    <div class="skeleton" >
+        <div class="grid formgrid">
+            <div class="field col-12 md:col-12 lg:col-12 xl:col-6">
+                <p-skeleton width="10rem" height="1rem" styleClass="mb-4"></p-skeleton>
+                <p-skeleton height="2rem" styleClass="mb-3"></p-skeleton>
+                <p-skeleton height="2rem"  styleClass="mb-3"></p-skeleton>
+                <p-skeleton height="2rem" styleClass="mb-3"></p-skeleton>
+                <p-skeleton height="2rem"  styleClass="mb-3"></p-skeleton>
+                <p-skeleton height="2rem" styleClass="mb-3"></p-skeleton>
+                <p-skeleton height="2rem"  ></p-skeleton>
+            </div>
+            <div class="field col-12 md:col-12 lg:col-12 xl:col-6">
+                <p-skeleton width="10rem" height="1rem" styleClass="mb-4"></p-skeleton>
+                <p-skeleton height="2rem" styleClass="mb-3"></p-skeleton>
+                <p-skeleton height="2rem"  styleClass="mb-3"></p-skeleton>
+                <p-skeleton height="2rem" styleClass="mb-3"></p-skeleton>
+                <p-skeleton height="2rem"  styleClass="mb-3"></p-skeleton>
+                <p-skeleton height="2rem" styleClass="mb-3"></p-skeleton>
+                <p-skeleton height="2rem"  ></p-skeleton>
+            </div>
+        </div>
+    </div>
+</p-card>
