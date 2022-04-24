@@ -19,6 +19,8 @@
 package it.bitify.esercizio.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -35,16 +37,21 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 //import org.springframework.security.access.prepost.PreAuthorize;
 
+import java.util.LinkedHashMap;
+
 import javax.servlet.http.HttpServletResponse;
 
+import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import it.bitify.esercizio.service.AccountService;
 import it.bitify.esercizio.model.Account;
 import it.bitify.esercizio.dto.PagedResponse;
+import it.bitify.esercizio.dto.SandBoxBaseResponse;
 import it.bitify.esercizio.dto.ApiResponse;
 import it.bitify.esercizio.util.AppConstants;
+import it.bitify.esercizio.util.ProxyUtil;
 
 
 /*******************************************************************************************
@@ -55,11 +62,22 @@ import it.bitify.esercizio.util.AppConstants;
 @RequestMapping("/api/account")
 public class AccountController {
 	
-   Logger logger = LoggerFactory.getLogger(AccountController.class);
+   private static final String String = null;
+
+Logger logger = LoggerFactory.getLogger(AccountController.class);
 	
    @Autowired
    AccountService accountService;
+   
+   @Autowired
+   ProxyUtil proxyUtil; 
 
+	@Value("${fabrick.account}")
+	public String accountApi;
+	
+   private final ModelMapper modelMapper = new ModelMapper();   
+
+   
    //@PreAuthorize("hasAuthority('account_list_all')")
    @GetMapping("/all")
    public ResponseEntity<Object> getAllAccounts() {
@@ -131,4 +149,10 @@ public class AccountController {
 		accountService.generateReportCsv(response);
 	}
    
+   @GetMapping("/sandbox/{accountId}")
+   public Account getAccountByAccountId(@PathVariable Long accountId) {
+		String api = accountApi + accountId.toString(); 
+		ResponseEntity<SandBoxBaseResponse> response =  proxyUtil.restCall(api, HttpMethod.GET); 
+	  return modelMapper.map(response.getBody().get(AppConstants.PAYLOAD), Account.class); 
+   }
 }

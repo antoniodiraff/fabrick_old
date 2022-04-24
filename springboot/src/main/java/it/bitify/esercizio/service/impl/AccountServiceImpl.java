@@ -226,4 +226,12 @@ public class AccountServiceImpl implements AccountService {
 			e.printStackTrace();
 		}
 	}
+
+	@Override
+	public Optional<Account> findByAccountId(Long accountId) {
+		// TODO Auto-generated method stub
+		return Optional.empty();
+	}
+	
+	
 }

@@ -40,4 +40,5 @@ public interface AccountService {
    public abstract void generateReportPdf(HttpServletResponse response);
    public abstract void generateReportXls(HttpServletResponse response);
    public abstract void generateReportCsv(HttpServletResponse response);
+   public abstract Optional<Account> findByAccountId(Long accountId);
 }
