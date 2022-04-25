@@ -45,6 +45,7 @@ import it.bitify.esercizio.model.Transaction;
 import it.bitify.esercizio.dto.PagedResponse;
 import it.bitify.esercizio.dto.ApiResponse;
 import it.bitify.esercizio.util.AppConstants;
+import springfox.documentation.annotations.ApiIgnore;
 
 
 /*******************************************************************************************
@@ -60,13 +61,11 @@ public class TransactionController {
    @Autowired
    TransactionService transactionService;
 
-   //@PreAuthorize("hasAuthority('transaction_list_all')")
    @GetMapping("/all")
    public ResponseEntity<Object> getAllTransactions() {
       return new ResponseEntity<>(transactionService.getAll(), HttpStatus.OK);
    }
    
-   //@PreAuthorize("hasAuthority('transaction_list_paged')")
    @GetMapping
    public PagedResponse<Transaction> getTransactions( @RequestParam(value = "page", defaultValue = AppConstants.DEFAULT_PAGE_NUMBER) int page,
                                                				  @RequestParam(value = "size", defaultValue = AppConstants.DEFAULT_PAGE_SIZE) int size,
@@ -77,13 +76,11 @@ public class TransactionController {
        return transactionService.getAllPaged(page, size, sortdir,sortfield,searchstring);
    }
    
-   //@PreAuthorize("hasAuthority('transaction_by_id')")
    @GetMapping("/{id}")
    public Transaction getTransactionById(@PathVariable Long id) {
        return transactionService.findById(id).get();
    }
    
-   //@PreAuthorize("hasAuthority('transaction_update')")
    @PutMapping
    public ResponseEntity<Object> 
       updateTransaction(@RequestBody Transaction transaction) {
@@ -92,14 +89,12 @@ public class TransactionController {
       return ResponseEntity.ok(new ApiResponse(true, "Transaction is updated successsfully"));
    }
    
-   //@PreAuthorize("hasAuthority('transaction_delete')")
    @DeleteMapping("/{id}")
    public ResponseEntity<Object> delete(@PathVariable("id") Long id) {
 	   transactionService.deleteTransaction(id);
       return ResponseEntity.ok(new ApiResponse(true, "Transaction is deleted successsfully"));
    }
    
-   //@PreAuthorize("hasAuthority('transaction_delete_all')")
    @PutMapping("/deleteAll")
    public ResponseEntity<Object> 
       deleteTransactions(@RequestBody Transaction[] transactions) {
@@ -108,24 +103,23 @@ public class TransactionController {
       return ResponseEntity.ok(new ApiResponse(true, "Transactions are deleted successsfully"));
    }
    
-   //@PreAuthorize("hasAuthority('transaction_create')")
    @PostMapping
    public ResponseEntity<Object> createTransaction(@RequestBody Transaction transaction) {
 	   transactionService.createTransaction(transaction);
       return ResponseEntity.ok(new ApiResponse(true, "Transaction is created successsfully"));
    }
    	
-        //@PreAuthorize("hasAuthority('transaction_report_pdf')")
-	@GetMapping("/report/pdf")
+   @ApiIgnore
+   @GetMapping("/report/pdf")
 	public void generateReportPdf(HttpServletResponse response) {
 		transactionService.generateReportPdf(response);
 	}
-        //@PreAuthorize("hasAuthority('transaction_report_xls')")
+	@ApiIgnore
 	@GetMapping("/report/xls")
 	public void generateReportXls(HttpServletResponse response) {
 		transactionService.generateReportXls(response);
 	}
-        //@PreAuthorize("hasAuthority('transaction_report_csv')")
+	@ApiIgnore
 	@GetMapping("/report/csv")
 	public void generateReportCsv(HttpServletResponse response) {
 		transactionService.generateReportCsv(response);

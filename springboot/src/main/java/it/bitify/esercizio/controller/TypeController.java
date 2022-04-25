@@ -27,6 +27,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.v3.oas.annotations.Hidden;
+
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -45,12 +47,14 @@ import it.bitify.esercizio.model.Type;
 import it.bitify.esercizio.dto.PagedResponse;
 import it.bitify.esercizio.dto.ApiResponse;
 import it.bitify.esercizio.util.AppConstants;
+import springfox.documentation.annotations.ApiIgnore;
 
 
 /*******************************************************************************************
  * Created by A. Di Raffaele 
  * The Type
  ******************************************************************************************/
+@ApiIgnore
 @RestController
 @RequestMapping("/api/type")
 public class TypeController {
@@ -60,13 +64,11 @@ public class TypeController {
    @Autowired
    TypeService typeService;
 
-   //@PreAuthorize("hasAuthority('type_list_all')")
    @GetMapping("/all")
    public ResponseEntity<Object> getAllTypes() {
       return new ResponseEntity<>(typeService.getAll(), HttpStatus.OK);
    }
    
-   //@PreAuthorize("hasAuthority('type_list_paged')")
    @GetMapping
    public PagedResponse<Type> getTypes( @RequestParam(value = "page", defaultValue = AppConstants.DEFAULT_PAGE_NUMBER) int page,
                                                				  @RequestParam(value = "size", defaultValue = AppConstants.DEFAULT_PAGE_SIZE) int size,
@@ -77,13 +79,11 @@ public class TypeController {
        return typeService.getAllPaged(page, size, sortdir,sortfield,searchstring);
    }
    
-   //@PreAuthorize("hasAuthority('type_by_id')")
    @GetMapping("/{id}")
    public Type getTypeById(@PathVariable String id) {
        return typeService.findById(id).get();
    }
    
-   //@PreAuthorize("hasAuthority('type_update')")
    @PutMapping
    public ResponseEntity<Object> 
       updateType(@RequestBody Type type) {
@@ -92,14 +92,12 @@ public class TypeController {
       return ResponseEntity.ok(new ApiResponse(true, "Type is updated successsfully"));
    }
    
-   //@PreAuthorize("hasAuthority('type_delete')")
    @DeleteMapping("/{id}")
    public ResponseEntity<Object> delete(@PathVariable("id") String id) {
 	   typeService.deleteType(id);
       return ResponseEntity.ok(new ApiResponse(true, "Type is deleted successsfully"));
    }
    
-   //@PreAuthorize("hasAuthority('type_delete_all')")
    @PutMapping("/deleteAll")
    public ResponseEntity<Object> 
       deleteTypes(@RequestBody Type[] types) {
@@ -108,24 +106,23 @@ public class TypeController {
       return ResponseEntity.ok(new ApiResponse(true, "Types are deleted successsfully"));
    }
    
-   //@PreAuthorize("hasAuthority('type_create')")
    @PostMapping
    public ResponseEntity<Object> createType(@RequestBody Type type) {
 	   typeService.createType(type);
       return ResponseEntity.ok(new ApiResponse(true, "Type is created successsfully"));
    }
    	
-        //@PreAuthorize("hasAuthority('type_report_pdf')")
-	@GetMapping("/report/pdf")
+   @ApiIgnore
+   @GetMapping("/report/pdf")
 	public void generateReportPdf(HttpServletResponse response) {
 		typeService.generateReportPdf(response);
 	}
-        //@PreAuthorize("hasAuthority('type_report_xls')")
+	@ApiIgnore
 	@GetMapping("/report/xls")
 	public void generateReportXls(HttpServletResponse response) {
 		typeService.generateReportXls(response);
 	}
-        //@PreAuthorize("hasAuthority('type_report_csv')")
+	@ApiIgnore
 	@GetMapping("/report/csv")
 	public void generateReportCsv(HttpServletResponse response) {
 		typeService.generateReportCsv(response);

@@ -49,7 +49,7 @@ import it.bitify.esercizio.model.audit.UserDateAudit;
  */
 @Entity
 @Table(name = "ACCOUNT")
-public class Account extends UserDateAudit {
+public class Account {
 	    
 /** accountId: The ID of the account. */
 @Id

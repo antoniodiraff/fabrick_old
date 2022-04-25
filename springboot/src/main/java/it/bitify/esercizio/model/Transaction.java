@@ -49,7 +49,7 @@ import it.bitify.esercizio.model.audit.UserDateAudit;
  */
 @Entity
 @Table(name = "TRANSACTION")
-public class Transaction extends UserDateAudit {
+public class Transaction {
 	    
 /** transactionId: The ID of the transaction. This is a unique ID for the transaction, valid to identify a transaction across all of your accounts provided by Banca Sella. */
 @Id

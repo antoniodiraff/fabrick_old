@@ -49,19 +49,19 @@ public class SwaggerConfiguration {
           .securitySchemes(Arrays.asList(apiKey()))
           .select()
           .apis(RequestHandlerSelectors.any())
-          .paths(PathSelectors.any())
+          .paths(PathSelectors.ant("/esercizio/api/**"))
           .build();
     }
     
 
     private ApiInfo apiInfo() {
-      return new ApiInfo("Rest API esercizio ",
-          "Consulta e testa tutte le API.",
+      return new ApiInfo("Rest API Esercizio Fabrick",
+          "Consulta e testa tutte le API per l'esercizio Fabrick.",
           "1.0",
           "Terms of service",
-          new Contact("Automa", "www.automa-lowcode.com", "ernest.nappi@gmail.com"),
+          new Contact("Bitify", "https://www.bitify.it", "info@bitify.it"),
           "License of API",
-          "API license URL",
+          "https://www.bitify.it",
           Collections.emptyList());
     }
 

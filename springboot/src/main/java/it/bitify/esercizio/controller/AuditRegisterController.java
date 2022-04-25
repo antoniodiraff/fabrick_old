@@ -45,6 +45,7 @@ import it.bitify.esercizio.model.AuditRegister;
 import it.bitify.esercizio.dto.PagedResponse;
 import it.bitify.esercizio.dto.ApiResponse;
 import it.bitify.esercizio.util.AppConstants;
+import springfox.documentation.annotations.ApiIgnore;
 
 
 /*******************************************************************************************
@@ -60,13 +61,11 @@ public class AuditRegisterController {
    @Autowired
    AuditRegisterService auditregisterService;
 
-   //@PreAuthorize("hasAuthority('auditregister_list_all')")
    @GetMapping("/all")
    public ResponseEntity<Object> getAllAuditRegisters() {
       return new ResponseEntity<>(auditregisterService.getAll(), HttpStatus.OK);
    }
    
-   //@PreAuthorize("hasAuthority('auditregister_list_paged')")
    @GetMapping
    public PagedResponse<AuditRegister> getAuditRegisters( @RequestParam(value = "page", defaultValue = AppConstants.DEFAULT_PAGE_NUMBER) int page,
                                                				  @RequestParam(value = "size", defaultValue = AppConstants.DEFAULT_PAGE_SIZE) int size,
@@ -77,13 +76,11 @@ public class AuditRegisterController {
        return auditregisterService.getAllPaged(page, size, sortdir,sortfield,searchstring);
    }
    
-   //@PreAuthorize("hasAuthority('auditregister_by_id')")
    @GetMapping("/{id}")
    public AuditRegister getAuditRegisterById(@PathVariable Long id) {
        return auditregisterService.findById(id).get();
    }
    
-   //@PreAuthorize("hasAuthority('auditregister_update')")
    @PutMapping
    public ResponseEntity<Object> 
       updateAuditRegister(@RequestBody AuditRegister auditregister) {
@@ -92,14 +89,12 @@ public class AuditRegisterController {
       return ResponseEntity.ok(new ApiResponse(true, "AuditRegister is updated successsfully"));
    }
    
-   //@PreAuthorize("hasAuthority('auditregister_delete')")
    @DeleteMapping("/{id}")
    public ResponseEntity<Object> delete(@PathVariable("id") Long id) {
 	   auditregisterService.deleteAuditRegister(id);
       return ResponseEntity.ok(new ApiResponse(true, "AuditRegister is deleted successsfully"));
    }
    
-   //@PreAuthorize("hasAuthority('auditregister_delete_all')")
    @PutMapping("/deleteAll")
    public ResponseEntity<Object> 
       deleteAuditRegisters(@RequestBody AuditRegister[] auditregisters) {
@@ -108,24 +103,23 @@ public class AuditRegisterController {
       return ResponseEntity.ok(new ApiResponse(true, "AuditRegisters are deleted successsfully"));
    }
    
-   //@PreAuthorize("hasAuthority('auditregister_create')")
    @PostMapping
    public ResponseEntity<Object> createAuditRegister(@RequestBody AuditRegister auditregister) {
 	   auditregisterService.createAuditRegister(auditregister);
       return ResponseEntity.ok(new ApiResponse(true, "AuditRegister is created successsfully"));
    }
    	
-        //@PreAuthorize("hasAuthority('auditregister_report_pdf')")
+   @ApiIgnore
 	@GetMapping("/report/pdf")
 	public void generateReportPdf(HttpServletResponse response) {
 		auditregisterService.generateReportPdf(response);
 	}
-        //@PreAuthorize("hasAuthority('auditregister_report_xls')")
+   @ApiIgnore
 	@GetMapping("/report/xls")
 	public void generateReportXls(HttpServletResponse response) {
 		auditregisterService.generateReportXls(response);
 	}
-        //@PreAuthorize("hasAuthority('auditregister_report_csv')")
+   @ApiIgnore
 	@GetMapping("/report/csv")
 	public void generateReportCsv(HttpServletResponse response) {
 		auditregisterService.generateReportCsv(response);

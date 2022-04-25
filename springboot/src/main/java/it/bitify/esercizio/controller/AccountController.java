@@ -29,6 +29,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.annotations.ApiOperation;
+
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -52,6 +54,7 @@ import it.bitify.esercizio.dto.SandBoxBaseResponse;
 import it.bitify.esercizio.dto.ApiResponse;
 import it.bitify.esercizio.util.AppConstants;
 import it.bitify.esercizio.util.ProxyUtil;
+import springfox.documentation.annotations.ApiIgnore;
 
 
 /*******************************************************************************************
@@ -133,22 +136,23 @@ Logger logger = LoggerFactory.getLogger(AccountController.class);
       return ResponseEntity.ok(new ApiResponse(true, "Account is created successsfully"));
    }
    	
-        //@PreAuthorize("hasAuthority('account_report_pdf')")
+    @ApiIgnore
 	@GetMapping("/report/pdf")
 	public void generateReportPdf(HttpServletResponse response) {
 		accountService.generateReportPdf(response);
 	}
-        //@PreAuthorize("hasAuthority('account_report_xls')")
+    @ApiIgnore
 	@GetMapping("/report/xls")
 	public void generateReportXls(HttpServletResponse response) {
 		accountService.generateReportXls(response);
 	}
-        //@PreAuthorize("hasAuthority('account_report_csv')")
+    @ApiIgnore
 	@GetMapping("/report/csv")
 	public void generateReportCsv(HttpServletResponse response) {
 		accountService.generateReportCsv(response);
 	}
    
+   @ApiOperation(value = "Retrieve account info. Account id to test: 14537780")
    @GetMapping("/sandbox/{accountId}")
    public Account getAccountByAccountId(@PathVariable Long accountId) {
 		String api = accountApi + accountId.toString(); 
