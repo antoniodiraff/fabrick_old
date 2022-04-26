@@ -151,7 +151,12 @@ Logger logger = LoggerFactory.getLogger(AccountController.class);
 	public void generateReportCsv(HttpServletResponse response) {
 		accountService.generateReportCsv(response);
 	}
-   
+    
+   /**
+    * 
+    * @param accountId
+    * @return
+    */
    @ApiOperation(value = "Retrieve account info. Account id to test: 14537780")
    @GetMapping("/sandbox/{accountId}")
    public Account getAccountByAccountId(@PathVariable Long accountId) {

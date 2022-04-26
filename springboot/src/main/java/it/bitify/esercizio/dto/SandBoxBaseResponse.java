@@ -4,21 +4,6 @@ import java.util.LinkedHashMap;
 
 public class SandBoxBaseResponse extends LinkedHashMap<String, Object>{
 
-	
-//	{
-//	    "status": "KO",
-//	    "errors": [
-//	        {
-//	            "code": "REQ500",
-//	            "description": "Problem with Service",
-//	            "params": ""
-//	        }
-//	    ],
-//	    "payload": {}
-//	}
-//	
-	
-	
 	/**
 	 * 
 	 */

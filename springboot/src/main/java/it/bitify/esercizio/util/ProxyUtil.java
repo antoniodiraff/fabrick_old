@@ -24,7 +24,12 @@ public class ProxyUtil {
 	@Value("${fabrick.apikey}")
 	public String apikey;
 	
-	
+	/**
+	 * 
+	 * @param api
+	 * @param httpMethod
+	 * @return
+	 */
 	public ResponseEntity<SandBoxBaseResponse> restCall(String api, HttpMethod httpMethod) {
 		
 		RestTemplate restTemplate = new RestTemplate();
