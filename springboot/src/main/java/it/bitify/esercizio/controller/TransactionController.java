@@ -19,6 +19,8 @@
 package it.bitify.esercizio.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,6 +28,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+
+import io.swagger.annotations.ApiOperation;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -35,16 +39,24 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 //import org.springframework.security.access.prepost.PreAuthorize;
 
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.servlet.http.HttpServletResponse;
 
+import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import it.bitify.esercizio.service.TransactionService;
+import it.bitify.esercizio.model.Account;
 import it.bitify.esercizio.model.Transaction;
 import it.bitify.esercizio.dto.PagedResponse;
+import it.bitify.esercizio.dto.SandBoxBaseResponse;
 import it.bitify.esercizio.dto.ApiResponse;
 import it.bitify.esercizio.util.AppConstants;
+import it.bitify.esercizio.util.ProxyUtil;
 import springfox.documentation.annotations.ApiIgnore;
 
 
@@ -60,7 +72,12 @@ public class TransactionController {
 	
    @Autowired
    TransactionService transactionService;
-
+   
+   @Autowired
+   ProxyUtil proxyUtil; 
+   
+   private final ModelMapper modelMapper = new ModelMapper();   
+   
    @GetMapping("/all")
    public ResponseEntity<Object> getAllTransactions() {
       return new ResponseEntity<>(transactionService.getAll(), HttpStatus.OK);
@@ -109,20 +126,33 @@ public class TransactionController {
       return ResponseEntity.ok(new ApiResponse(true, "Transaction is created successsfully"));
    }
    	
-   @ApiIgnore
-   @GetMapping("/report/pdf")
-	public void generateReportPdf(HttpServletResponse response) {
-		transactionService.generateReportPdf(response);
-	}
-	@ApiIgnore
-	@GetMapping("/report/xls")
-	public void generateReportXls(HttpServletResponse response) {
-		transactionService.generateReportXls(response);
-	}
-	@ApiIgnore
-	@GetMapping("/report/csv")
-	public void generateReportCsv(HttpServletResponse response) {
-		transactionService.generateReportCsv(response);
-	}
+   /**
+    * 
+    * @param accountId
+    * @return
+    */
+   @ApiOperation(value = "Retrieve transaction info. Account id to test: 14537780")
+   @GetMapping("/sandbox/{accountId}")
+   public Transaction getTransactionsByAccountId(@PathVariable Long accountId, 			
+//		   @RequestParam(value = "fromAccountingDate", required = true) @DateTimeFormat(pattern="yyyy-MM-dd") Date fromAccountingDate,
+//           @RequestParam(value = "toAccountingDate", required = true)  @DateTimeFormat(pattern="yyyy-MM-dd") Date toAccountingDate) {
+		   @RequestParam(value = "fromAccountingDate", required = true) String fromAccountingDate,
+         @RequestParam(value = "toAccountingDate", required = true)  String toAccountingDate) {
+		
+		Map<String, String> params = new HashMap<>();
+		if(fromAccountingDate!=null)
+		{
+			params.put("fromAccountingDate", fromAccountingDate);
+		}
+		
+		if(fromAccountingDate!=null)
+		{
+			params.put("toAccountingDate", toAccountingDate);
+		}
+		
+
+		ResponseEntity<SandBoxBaseResponse> response =  proxyUtil.restCall(proxyUtil.buildTransactionsUrl(accountId), HttpMethod.GET, params); 
+	  return modelMapper.map(response.getBody().get(AppConstants.PAYLOAD), Transaction.class); 
+   }
    
 }

@@ -75,9 +75,6 @@ Logger logger = LoggerFactory.getLogger(AccountController.class);
    @Autowired
    ProxyUtil proxyUtil; 
 
-	@Value("${fabrick.account}")
-	public String accountApi;
-	
    private final ModelMapper modelMapper = new ModelMapper();   
 
    
@@ -144,8 +141,7 @@ Logger logger = LoggerFactory.getLogger(AccountController.class);
    @ApiOperation(value = "Retrieve account info. Account id to test: 14537780")
    @GetMapping("/sandbox/{accountId}")
    public Account getAccountByAccountId(@PathVariable Long accountId) {
-		String api = accountApi + accountId.toString(); 
-		ResponseEntity<SandBoxBaseResponse> response =  proxyUtil.restCall(api, HttpMethod.GET); 
+		ResponseEntity<SandBoxBaseResponse> response =  proxyUtil.restCall(proxyUtil.buildAccountUrl(accountId), HttpMethod.GET, null); 
 	  return modelMapper.map(response.getBody().get(AppConstants.PAYLOAD), Account.class); 
    }
 }

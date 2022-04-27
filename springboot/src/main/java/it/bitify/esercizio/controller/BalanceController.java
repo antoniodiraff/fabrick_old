@@ -1,7 +1,6 @@
 package it.bitify.esercizio.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,7 +32,7 @@ public class BalanceController {
 	   @ApiOperation(value = "Retrieve balance info. Account id to test: 14537780")
 	   @GetMapping("/sandbox/{accountId}")
 	   public ResponseEntity<Object> getBalanceByAccountId(@PathVariable Long accountId) {
-			ResponseEntity<SandBoxBaseResponse> response =  proxyUtil.restCall(proxyUtil.buildBalanceUrl(accountId), HttpMethod.GET); 
+			ResponseEntity<SandBoxBaseResponse> response =  proxyUtil.restCall(proxyUtil.buildBalanceUrl(accountId), HttpMethod.GET, null); 
 		  return ResponseEntity.ok(response.getBody().get(AppConstants.PAYLOAD)); 
 	   }
 }

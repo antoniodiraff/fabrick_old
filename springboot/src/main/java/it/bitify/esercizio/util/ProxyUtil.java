@@ -1,5 +1,8 @@
 package it.bitify.esercizio.util;
 
+import java.util.Date;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -38,9 +41,12 @@ public class ProxyUtil {
 	 * 
 	 * @param api
 	 * @param httpMethod
+	 * @param params 
+	 * @param toAccountingDate 
+	 * @param fromAccountingDate 
 	 * @return
 	 */
-	public ResponseEntity<SandBoxBaseResponse> restCall(String api, HttpMethod httpMethod) {
+	public ResponseEntity<SandBoxBaseResponse> restCall(String api, HttpMethod httpMethod, Map<String, String> params) {
 		
 		RestTemplate restTemplate = new RestTemplate();
 		HttpHeaders headers = new HttpHeaders();
@@ -50,9 +56,9 @@ public class ProxyUtil {
 		headers.set("Api-Key", apikey);
 		
 		String url = baseurl + api; 
-		
+	
 		try {
-			ResponseEntity<SandBoxBaseResponse> responseEntity = restTemplate.exchange(url , httpMethod, new HttpEntity<>("parameters", headers), SandBoxBaseResponse.class);
+			ResponseEntity<SandBoxBaseResponse> responseEntity = restTemplate.exchange(url , httpMethod, new HttpEntity<>("parameters", headers), SandBoxBaseResponse.class, params);
 			return responseEntity;
 		}catch (RestClientException e) {
 			throw new RestClientException(e.getMessage().substring(e.getMessage().indexOf("["), e.getMessage().length()));	
@@ -79,5 +85,16 @@ public class ProxyUtil {
 	 */
 	public String buildTransactionsUrl(Long accountId) {
 		return accountApi + String.valueOf(accountId) + transactionsApi;
+	}
+	
+	/**
+	 * 
+	 * Costruisce l'URL per la retrieve dell'Account.
+	 * 
+	 * @param accountId
+	 * @return
+	 */
+	public String buildAccountUrl(Long accountId) {
+		return  accountApi + accountId.toString(); 
 	}
 }
