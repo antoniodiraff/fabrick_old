@@ -133,7 +133,7 @@ public class TransactionController {
     */
    @ApiOperation(value = "Retrieve transaction info. Account id to test: 14537780")
    @GetMapping("/sandbox/{accountId}")
-   public Transaction getTransactionsByAccountId(@PathVariable Long accountId, 			
+   public ResponseEntity<Object> getTransactionsByAccountId(@PathVariable Long accountId, 			
 //		   @RequestParam(value = "fromAccountingDate", required = true) @DateTimeFormat(pattern="yyyy-MM-dd") Date fromAccountingDate,
 //           @RequestParam(value = "toAccountingDate", required = true)  @DateTimeFormat(pattern="yyyy-MM-dd") Date toAccountingDate) {
 		   @RequestParam(value = "fromAccountingDate", required = true) String fromAccountingDate,
@@ -152,7 +152,7 @@ public class TransactionController {
 		
 
 		ResponseEntity<SandBoxBaseResponse> response =  proxyUtil.restCall(proxyUtil.buildTransactionsUrl(accountId), HttpMethod.GET, params); 
-	  return modelMapper.map(response.getBody().get(AppConstants.PAYLOAD), Transaction.class); 
+		return ResponseEntity.ok(modelMapper.map(response.getBody().get(AppConstants.PAYLOAD), Transaction.class)); 
    }
    
 }

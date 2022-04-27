@@ -10,4 +10,5 @@ public interface AppConstants {
     int MAX_PAGE_SIZE = 150;
     
     String PAYLOAD = "payload"; 
+    String ERRORS = "errors"; 
 }

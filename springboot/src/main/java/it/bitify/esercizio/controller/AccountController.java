@@ -140,8 +140,8 @@ Logger logger = LoggerFactory.getLogger(AccountController.class);
     */
    @ApiOperation(value = "Retrieve account info. Account id to test: 14537780")
    @GetMapping("/sandbox/{accountId}")
-   public Account getAccountByAccountId(@PathVariable Long accountId) {
+   public ResponseEntity<Account> getAccountByAccountId(@PathVariable Long accountId) {
 		ResponseEntity<SandBoxBaseResponse> response =  proxyUtil.restCall(proxyUtil.buildAccountUrl(accountId), HttpMethod.GET, null); 
-	  return modelMapper.map(response.getBody().get(AppConstants.PAYLOAD), Account.class); 
+	  return ResponseEntity.ok(modelMapper.map(response.getBody().get(AppConstants.PAYLOAD), Account.class)); 
    }
 }

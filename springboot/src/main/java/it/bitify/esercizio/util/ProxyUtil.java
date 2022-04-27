@@ -1,6 +1,7 @@
 package it.bitify.esercizio.util;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -56,7 +57,9 @@ public class ProxyUtil {
 		headers.set("Api-Key", apikey);
 		
 		String url = baseurl + api; 
-	
+		if(params==null) {
+			params = new HashMap<>();
+		}
 		try {
 			ResponseEntity<SandBoxBaseResponse> responseEntity = restTemplate.exchange(url , httpMethod, new HttpEntity<>("parameters", headers), SandBoxBaseResponse.class, params);
 			return responseEntity;
@@ -87,7 +90,7 @@ public class ProxyUtil {
 		return accountApi + String.valueOf(accountId) + transactionsApi;
 	}
 	
-	/**
+	/** 
 	 * 
 	 * Costruisce l'URL per la retrieve dell'Account.
 	 * 
