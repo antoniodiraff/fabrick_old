@@ -12,6 +12,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 import it.bitify.esercizio.dto.ErrorDetail;
 import it.bitify.esercizio.dto.SandBoxBaseResponse;
+import it.bitify.esercizio.util.AppConstants;
 
 
 @RestControllerAdvice
@@ -40,7 +41,7 @@ public class ExceptionHandler extends ResponseEntityExceptionHandler {
     
 	private ResponseEntity<SandBoxBaseResponse> getException(RuntimeException exception, WebRequest request, MessageType messageLevelType, HttpStatus httpStatus){
 		SandBoxBaseResponse response = new SandBoxBaseResponse(); 
-		response.put("error", new ErrorDetail(exception, request)); 
+		response.put(AppConstants.ERROR, new ErrorDetail(exception, request)); 
 		return new ResponseEntity<SandBoxBaseResponse>(response, httpStatus);
 	}
 	
