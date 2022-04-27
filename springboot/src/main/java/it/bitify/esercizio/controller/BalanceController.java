@@ -34,7 +34,7 @@ public class BalanceController {
 	    */
 	   @ApiOperation(value = "Retrieve balance info. Account id to test: 14537780")
 	   @GetMapping("/sandbox/{accountId}")
-	   public ResponseEntity<SandBoxBaseResponse> getBalanceByAccountId(@PathVariable Long accountId) throws RestClientException, BadRequestException, MismatchedCharException  {
+	   public ResponseEntity<SandBoxBaseResponse> getBalanceByAccountId(@PathVariable Long accountId){
 		   return proxyUtil.restCall(proxyUtil.buildBalanceUrl(accountId), HttpMethod.GET, null); 
 	   }
 }

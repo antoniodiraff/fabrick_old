@@ -138,14 +138,8 @@ public class TransactionController {
    @ApiOperation(value = "Retrieve transaction info. Account id to test: 14537780")
    @GetMapping("/sandbox/{accountId}")
    public ResponseEntity<Object> getTransactionsByAccountId(@PathVariable Long accountId, 			
-//		   @RequestParam(value = "fromAccountingDate", required = true) @DateTimeFormat(pattern="yyyy-MM-dd") Date fromAccountingDate,
-//           @RequestParam(value = "toAccountingDate", required = true)  @DateTimeFormat(pattern="yyyy-MM-dd") Date toAccountingDate) {
-		   @RequestParam(value = "fromAccountingDate", required = true) String fromAccountingDate,
-         @RequestParam(value = "toAccountingDate", required = true)  String toAccountingDate)
-        		 throws RestClientException, 
-						   BadRequestException, 
-						   MismatchedCharException, 
-						   TransactionTimedOutException {
+		 @RequestParam(value = "fromAccountingDate", required = true) String fromAccountingDate,
+         @RequestParam(value = "toAccountingDate", required = true)  String toAccountingDate){
 		
 		Map<String, String> params = new HashMap<>();
 		if(fromAccountingDate!=null)

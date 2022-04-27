@@ -37,7 +37,4 @@ public interface AuditRegisterService {
    public abstract Optional<AuditRegister> findById(Long id);
    public abstract Collection<AuditRegister> getAll();
    public abstract PagedResponse<AuditRegister> getAllPaged(int page, int size, int sortDirection,String sortField,String searchString);
-   public abstract void generateReportPdf(HttpServletResponse response);
-   public abstract void generateReportXls(HttpServletResponse response);
-   public abstract void generateReportCsv(HttpServletResponse response);
 }

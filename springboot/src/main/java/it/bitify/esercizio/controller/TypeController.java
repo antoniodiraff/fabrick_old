@@ -111,21 +111,5 @@ public class TypeController {
 	   typeService.createType(type);
       return ResponseEntity.ok(new ApiResponse(true, "Type is created successsfully"));
    }
-   	
-   @ApiIgnore
-   @GetMapping("/report/pdf")
-	public void generateReportPdf(HttpServletResponse response) {
-		typeService.generateReportPdf(response);
-	}
-	@ApiIgnore
-	@GetMapping("/report/xls")
-	public void generateReportXls(HttpServletResponse response) {
-		typeService.generateReportXls(response);
-	}
-	@ApiIgnore
-	@GetMapping("/report/csv")
-	public void generateReportCsv(HttpServletResponse response) {
-		typeService.generateReportCsv(response);
-	}
    
 }

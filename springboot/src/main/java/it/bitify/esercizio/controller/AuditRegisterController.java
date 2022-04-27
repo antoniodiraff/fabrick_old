@@ -108,21 +108,5 @@ public class AuditRegisterController {
 	   auditregisterService.createAuditRegister(auditregister);
       return ResponseEntity.ok(new ApiResponse(true, "AuditRegister is created successsfully"));
    }
-   	
-   @ApiIgnore
-	@GetMapping("/report/pdf")
-	public void generateReportPdf(HttpServletResponse response) {
-		auditregisterService.generateReportPdf(response);
-	}
-   @ApiIgnore
-	@GetMapping("/report/xls")
-	public void generateReportXls(HttpServletResponse response) {
-		auditregisterService.generateReportXls(response);
-	}
-   @ApiIgnore
-	@GetMapping("/report/csv")
-	public void generateReportCsv(HttpServletResponse response) {
-		auditregisterService.generateReportCsv(response);
-	}
    
 }
