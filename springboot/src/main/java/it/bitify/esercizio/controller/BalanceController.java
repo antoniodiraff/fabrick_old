@@ -33,6 +33,6 @@ public class BalanceController {
 	   @GetMapping("/sandbox/{accountId}")
 	   public ResponseEntity<Object> getBalanceByAccountId(@PathVariable Long accountId) {
 			ResponseEntity<SandBoxBaseResponse> response =  proxyUtil.restCall(proxyUtil.buildBalanceUrl(accountId), HttpMethod.GET, null); 
-		  return ResponseEntity.ok(response.getBody().get(AppConstants.PAYLOAD)); 
+		  return ResponseEntity.ok(response.getBody()); 
 	   }
 }

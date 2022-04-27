@@ -152,7 +152,7 @@ public class TransactionController {
 		
 
 		ResponseEntity<SandBoxBaseResponse> response =  proxyUtil.restCall(proxyUtil.buildTransactionsUrl(accountId), HttpMethod.GET, params); 
-		return ResponseEntity.ok(modelMapper.map(response.getBody().get(AppConstants.PAYLOAD), Transaction.class)); 
+		return ResponseEntity.ok(response.getBody()); 
    }
    
 }

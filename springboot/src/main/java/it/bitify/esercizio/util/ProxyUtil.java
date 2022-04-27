@@ -11,8 +11,10 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import it.bitify.esercizio.dto.SandBoxBaseResponse;
 
@@ -59,7 +61,14 @@ public class ProxyUtil {
 		String url = baseurl + api; 
 		if(params==null) {
 			params = new HashMap<>();
+		}else {
+			for (Map.Entry<String, String> entry : params.entrySet()) {
+				String key = entry.getKey();
+				url = UriComponentsBuilder.fromHttpUrl(url).queryParam(key, "{"+key+"}").encode().toUriString();
+			}
 		}
+
+		
 		try {
 			ResponseEntity<SandBoxBaseResponse> responseEntity = restTemplate.exchange(url , httpMethod, new HttpEntity<>("parameters", headers), SandBoxBaseResponse.class, params);
 			return responseEntity;
