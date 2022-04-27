@@ -23,12 +23,15 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.TransactionTimedOutException;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestClientException;
 
+import antlr.MismatchedCharException;
 import io.swagger.annotations.ApiOperation;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -54,6 +57,7 @@ import it.bitify.esercizio.model.Account;
 import it.bitify.esercizio.model.Transaction;
 import it.bitify.esercizio.dto.PagedResponse;
 import it.bitify.esercizio.dto.SandBoxBaseResponse;
+import it.bitify.esercizio.exception.BadRequestException;
 import it.bitify.esercizio.dto.ApiResponse;
 import it.bitify.esercizio.util.AppConstants;
 import it.bitify.esercizio.util.ProxyUtil;
@@ -137,7 +141,11 @@ public class TransactionController {
 //		   @RequestParam(value = "fromAccountingDate", required = true) @DateTimeFormat(pattern="yyyy-MM-dd") Date fromAccountingDate,
 //           @RequestParam(value = "toAccountingDate", required = true)  @DateTimeFormat(pattern="yyyy-MM-dd") Date toAccountingDate) {
 		   @RequestParam(value = "fromAccountingDate", required = true) String fromAccountingDate,
-         @RequestParam(value = "toAccountingDate", required = true)  String toAccountingDate) {
+         @RequestParam(value = "toAccountingDate", required = true)  String toAccountingDate)
+        		 throws RestClientException, 
+						   BadRequestException, 
+						   MismatchedCharException, 
+						   TransactionTimedOutException {
 		
 		Map<String, String> params = new HashMap<>();
 		if(fromAccountingDate!=null)

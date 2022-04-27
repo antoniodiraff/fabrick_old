@@ -28,7 +28,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestClientException;
 
+import antlr.MismatchedCharException;
 import io.swagger.annotations.ApiOperation;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -51,6 +53,7 @@ import it.bitify.esercizio.service.AccountService;
 import it.bitify.esercizio.model.Account;
 import it.bitify.esercizio.dto.PagedResponse;
 import it.bitify.esercizio.dto.SandBoxBaseResponse;
+import it.bitify.esercizio.exception.BadRequestException;
 import it.bitify.esercizio.dto.ApiResponse;
 import it.bitify.esercizio.util.AppConstants;
 import it.bitify.esercizio.util.ProxyUtil;
@@ -140,7 +143,7 @@ Logger logger = LoggerFactory.getLogger(AccountController.class);
     */
    @ApiOperation(value = "Retrieve account info. Account id to test: 14537780")
    @GetMapping("/sandbox/{accountId}")
-   public ResponseEntity<Account> getAccountByAccountId(@PathVariable Long accountId) {
+   public ResponseEntity<Account> getAccountByAccountId(@PathVariable Long accountId) throws RestClientException, BadRequestException, MismatchedCharException {
 		ResponseEntity<SandBoxBaseResponse> response =  proxyUtil.restCall(proxyUtil.buildAccountUrl(accountId), HttpMethod.GET, null); 
 	  return ResponseEntity.ok(modelMapper.map(response.getBody().get(AppConstants.PAYLOAD), Account.class)); 
    }

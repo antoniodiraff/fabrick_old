@@ -7,9 +7,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestClientException;
 
+import antlr.MismatchedCharException;
 import io.swagger.annotations.ApiOperation;
 import it.bitify.esercizio.dto.SandBoxBaseResponse;
+import it.bitify.esercizio.exception.BadRequestException;
 import it.bitify.esercizio.util.AppConstants;
 import it.bitify.esercizio.util.ProxyUtil;
 
@@ -31,8 +34,7 @@ public class BalanceController {
 	    */
 	   @ApiOperation(value = "Retrieve balance info. Account id to test: 14537780")
 	   @GetMapping("/sandbox/{accountId}")
-	   public ResponseEntity<Object> getBalanceByAccountId(@PathVariable Long accountId) {
-			ResponseEntity<SandBoxBaseResponse> response =  proxyUtil.restCall(proxyUtil.buildBalanceUrl(accountId), HttpMethod.GET, null); 
-		  return ResponseEntity.ok(response.getBody()); 
+	   public ResponseEntity<SandBoxBaseResponse> getBalanceByAccountId(@PathVariable Long accountId) throws RestClientException, BadRequestException, MismatchedCharException  {
+		   return proxyUtil.restCall(proxyUtil.buildBalanceUrl(accountId), HttpMethod.GET, null); 
 	   }
 }

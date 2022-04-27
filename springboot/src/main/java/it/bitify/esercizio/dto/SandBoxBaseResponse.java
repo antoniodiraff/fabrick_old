@@ -8,19 +8,22 @@ public class SandBoxBaseResponse extends LinkedHashMap<String, Object>{
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	
+	
 	String status; 
-	Error error; 
+	ErrorDetail error; 
 	Object payload;
+	
 	public String getStatus() {
 		return status;
 	}
 	public void setStatus(String status) {
 		this.status = status;
 	}
-	public Error getError() {
+	public ErrorDetail getError() {
 		return error;
 	}
-	public void setError(Error error) {
+	public void setError(ErrorDetail error) {
 		this.error = error;
 	}
 	public Object getPayload() {
@@ -29,10 +32,6 @@ public class SandBoxBaseResponse extends LinkedHashMap<String, Object>{
 	public void setPayload(Object payload) {
 		this.payload = payload;
 	}
-	public SandBoxBaseResponse() {
-		super();
-		// TODO Auto-generated constructor stub
-	} 
 	
 	
 	
