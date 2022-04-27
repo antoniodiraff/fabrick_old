@@ -24,6 +24,16 @@ public class ProxyUtil {
 	@Value("${fabrick.apikey}")
 	public String apikey;
 	
+	@Value("${fabrick.balance}")
+	public String balanceApi;
+	
+	@Value("${fabrick.transactions}")
+	public String transactionsApi;
+	
+	@Value("${fabrick.account}")
+	public String accountApi;
+	
+	
 	/**
 	 * 
 	 * @param api
@@ -47,5 +57,27 @@ public class ProxyUtil {
 		}catch (RestClientException e) {
 			throw new RestClientException(e.getMessage().substring(e.getMessage().indexOf("["), e.getMessage().length()));	
 		}
+	}
+	
+	/**
+	 * 
+	 * Costruisce l'URL per la lettura del saldo.
+	 * 
+	 * @param accountId
+	 * @return
+	 */
+	public String buildBalanceUrl(Long accountId) {
+		return accountApi + String.valueOf(accountId) + balanceApi;
+	}
+	
+	/**
+	 * 
+	 * Costruisce l'URL per la lettura delle transazioni.
+	 * 
+	 * @param accountId
+	 * @return
+	 */
+	public String buildTransactionsUrl(Long accountId) {
+		return accountApi + String.valueOf(accountId) + transactionsApi;
 	}
 }

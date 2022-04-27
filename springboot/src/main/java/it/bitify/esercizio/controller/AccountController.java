@@ -135,23 +135,7 @@ Logger logger = LoggerFactory.getLogger(AccountController.class);
 	   accountService.createAccount(account);
       return ResponseEntity.ok(new ApiResponse(true, "Account is created successsfully"));
    }
-   	
-    @ApiIgnore
-	@GetMapping("/report/pdf")
-	public void generateReportPdf(HttpServletResponse response) {
-		accountService.generateReportPdf(response);
-	}
-    @ApiIgnore
-	@GetMapping("/report/xls")
-	public void generateReportXls(HttpServletResponse response) {
-		accountService.generateReportXls(response);
-	}
-    @ApiIgnore
-	@GetMapping("/report/csv")
-	public void generateReportCsv(HttpServletResponse response) {
-		accountService.generateReportCsv(response);
-	}
-    
+   
    /**
     * 
     * @param accountId
