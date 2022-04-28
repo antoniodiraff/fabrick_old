@@ -71,13 +71,14 @@ public class ProxyUtil {
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		headers.set("Auth-Schema", authschema);
 		headers.set("Api-Key", apikey);
-
+		
 		String url = baseurl + api; 
 		if(params==null) {
 			params = new HashMap<>();
 		}else {
 			for (Map.Entry<String, String> entry : params.entrySet()) {
 				String key = entry.getKey();
+				url = UriComponentsBuilder.fromHttpUrl(url).queryParam(key, "{"+key+"}").encode().toUriString();
 			}
 		}
 
