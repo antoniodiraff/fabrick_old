@@ -2,6 +2,8 @@ package it.bitify.esercizio.dto;
 
 import java.io.Serializable;
 
+import com.ibm.icu.math.BigDecimal;
+
 public class MoneyTransferRequest implements Serializable{
 
 	/**
@@ -12,16 +14,17 @@ public class MoneyTransferRequest implements Serializable{
 	private String executionDate;
 	private String uri;
 	private String description;
-	private long amount;
+	private BigDecimal amount;
 	private String currency;
-	private boolean isUrgent;
-	private boolean isInstant;
+	private Boolean isUrgent;
+	private Boolean isInstant;
+
 	private String feeType;
 	private String feeAccountId;
 	private TaxRelief taxRelief; 
 
-	public MoneyTransferRequest(Creditor creditor, String executionDate, String uri, String description, long amount,
-			String currency, boolean isUrgent, boolean isInstant, String feeType, String feeAccountId,
+	public MoneyTransferRequest(Creditor creditor, String executionDate, String uri, String description, BigDecimal amount,
+			String currency, Boolean isUrgent, Boolean isInstant, String feeType, String feeAccountId,
 			TaxRelief taxRelief) {
 		super();
 		this.creditor = creditor;
@@ -140,25 +143,25 @@ public class MoneyTransferRequest implements Serializable{
 	}
 
 	public static class  LegalPersonBeneficiary {
-		private Object fiscalCode;
-		private Object legalRepresentativeFiscalCode;
-		public Object getFiscalCode() {
+		private String fiscalCode;
+		private String legalRepresentativeFiscalCode;
+		public String getFiscalCode() {
 			return fiscalCode;
 		}
-		public void setFiscalCode(Object fiscalCode) {
+		public void setFiscalCode(String fiscalCode) {
 			this.fiscalCode = fiscalCode;
 		}
-		public Object getLegalRepresentativeFiscalCode() {
+		public String getLegalRepresentativeFiscalCode() {
 			return legalRepresentativeFiscalCode;
 		}
-		public void setLegalRepresentativeFiscalCode(Object legalRepresentativeFiscalCode) {
+		public void setLegalRepresentativeFiscalCode(String legalRepresentativeFiscalCode) {
 			this.legalRepresentativeFiscalCode = legalRepresentativeFiscalCode;
 		}
 		public LegalPersonBeneficiary() {
 			super();
 			// TODO Auto-generated constructor stub
 		}
-		public LegalPersonBeneficiary(Object fiscalCode, Object legalRepresentativeFiscalCode) {
+		public LegalPersonBeneficiary(String fiscalCode, String legalRepresentativeFiscalCode) {
 			super();
 			this.fiscalCode = fiscalCode;
 			this.legalRepresentativeFiscalCode = legalRepresentativeFiscalCode;
@@ -168,46 +171,46 @@ public class MoneyTransferRequest implements Serializable{
 
 	public static class  NaturalPersonBeneficiary {
 		private String fiscalCode1;
-		private Object fiscalCode2;
-		private Object fiscalCode3;
-		private Object fiscalCode4;
-		private Object fiscalCode5;
+		private String fiscalCode2;
+		private String fiscalCode3;
+		private String fiscalCode4;
+		private String fiscalCode5;
 		public String getFiscalCode1() {
 			return fiscalCode1;
 		}
 		public void setFiscalCode1(String fiscalCode1) {
 			this.fiscalCode1 = fiscalCode1;
 		}
-		public Object getFiscalCode2() {
+		public String getFiscalCode2() {
 			return fiscalCode2;
 		}
-		public void setFiscalCode2(Object fiscalCode2) {
+		public void setFiscalCode2(String fiscalCode2) {
 			this.fiscalCode2 = fiscalCode2;
 		}
-		public Object getFiscalCode3() {
+		public String getFiscalCode3() {
 			return fiscalCode3;
 		}
-		public void setFiscalCode3(Object fiscalCode3) {
+		public void setFiscalCode3(String fiscalCode3) {
 			this.fiscalCode3 = fiscalCode3;
 		}
-		public Object getFiscalCode4() {
+		public String getFiscalCode4() {
 			return fiscalCode4;
 		}
-		public void setFiscalCode4(Object fiscalCode4) {
+		public void setFiscalCode4(String fiscalCode4) {
 			this.fiscalCode4 = fiscalCode4;
 		}
-		public Object getFiscalCode5() {
+		public String getFiscalCode5() {
 			return fiscalCode5;
 		}
-		public void setFiscalCode5(Object fiscalCode5) {
+		public void setFiscalCode5(String fiscalCode5) {
 			this.fiscalCode5 = fiscalCode5;
 		}
 		public NaturalPersonBeneficiary() {
 			super();
 			// TODO Auto-generated constructor stub
 		}
-		public NaturalPersonBeneficiary(String fiscalCode1, Object fiscalCode2, Object fiscalCode3, Object fiscalCode4,
-				Object fiscalCode5) {
+		public NaturalPersonBeneficiary(String fiscalCode1, String fiscalCode2, String fiscalCode3, String fiscalCode4,
+				String fiscalCode5) {
 			super();
 			this.fiscalCode1 = fiscalCode1;
 			this.fiscalCode2 = fiscalCode2;
@@ -220,7 +223,7 @@ public class MoneyTransferRequest implements Serializable{
 
 	public static class TaxRelief {
 		private String taxReliefId;
-		private boolean isCondoUpgrade;
+		private Boolean isCondoUpgrade;
 		private String creditorFiscalCode;
 		private String beneficiaryType;
 		private NaturalPersonBeneficiary naturalPersonBeneficiary;
@@ -231,12 +234,7 @@ public class MoneyTransferRequest implements Serializable{
 		public void setTaxReliefId(String taxReliefId) {
 			this.taxReliefId = taxReliefId;
 		}
-		public boolean isCondoUpgrade() {
-			return isCondoUpgrade;
-		}
-		public void setCondoUpgrade(boolean isCondoUpgrade) {
-			this.isCondoUpgrade = isCondoUpgrade;
-		}
+		
 		public String getCreditorFiscalCode() {
 			return creditorFiscalCode;
 		}
@@ -265,7 +263,13 @@ public class MoneyTransferRequest implements Serializable{
 			super();
 			// TODO Auto-generated constructor stub
 		}
-		public TaxRelief(String taxReliefId, boolean isCondoUpgrade, String creditorFiscalCode, String beneficiaryType,
+		public Boolean getIsCondoUpgrade() {
+			return isCondoUpgrade;
+		}
+		public void setIsCondoUpgrade(Boolean isCondoUpgrade) {
+			this.isCondoUpgrade = isCondoUpgrade;
+		}
+		public TaxRelief(String taxReliefId, Boolean isCondoUpgrade, String creditorFiscalCode, String beneficiaryType,
 				NaturalPersonBeneficiary naturalPersonBeneficiary, LegalPersonBeneficiary legalPersonBeneficiary) {
 			super();
 			this.taxReliefId = taxReliefId;
@@ -275,6 +279,7 @@ public class MoneyTransferRequest implements Serializable{
 			this.naturalPersonBeneficiary = naturalPersonBeneficiary;
 			this.legalPersonBeneficiary = legalPersonBeneficiary;
 		}
+		
 
 	}
 
@@ -310,11 +315,11 @@ public class MoneyTransferRequest implements Serializable{
 		this.description = description;
 	}
 
-	public long getAmount() {
+	public BigDecimal getAmount() {
 		return amount;
 	}
 
-	public void setAmount(long amount) {
+	public void setAmount(BigDecimal amount) {
 		this.amount = amount;
 	}
 
@@ -326,21 +331,6 @@ public class MoneyTransferRequest implements Serializable{
 		this.currency = currency;
 	}
 
-	public boolean isUrgent() {
-		return isUrgent;
-	}
-
-	public void setUrgent(boolean isUrgent) {
-		this.isUrgent = isUrgent;
-	}
-
-	public boolean isInstant() {
-		return isInstant;
-	}
-
-	public void setInstant(boolean isInstant) {
-		this.isInstant = isInstant;
-	}
 
 	public String getFeeType() {
 		return feeType;
@@ -365,6 +355,25 @@ public class MoneyTransferRequest implements Serializable{
 	public void setTaxRelief(TaxRelief taxRelief) {
 		this.taxRelief = taxRelief;
 	}
+
+
+	public Boolean getIsUrgent() {
+		return isUrgent;
+	}
+
+	public void setIsUrgent(Boolean isUrgent) {
+		this.isUrgent = isUrgent;
+	}
+
+	public Boolean getIsInstant() {
+		return isInstant;
+	}
+
+	public void setIsInstant(Boolean isInstant) {
+		this.isInstant = isInstant;
+	}
+
+
 
 	
 	
