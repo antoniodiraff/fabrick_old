@@ -42,8 +42,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 //import org.springframework.security.access.prepost.PreAuthorize;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
@@ -63,98 +67,105 @@ import it.bitify.esercizio.util.AppConstants;
 import it.bitify.esercizio.util.ProxyUtil;
 import springfox.documentation.annotations.ApiIgnore;
 
-
 /*******************************************************************************************
- * Created by A. Di Raffaele 
- * The Transaction
+ * Created by A. Di Raffaele The Transaction
  ******************************************************************************************/
 @RestController
 @RequestMapping("/api/transaction")
 public class TransactionController {
-	
-   Logger logger = LoggerFactory.getLogger(TransactionController.class);
-	
-   @Autowired
-   TransactionService transactionService;
-   
-   @Autowired
-   ProxyUtil proxyUtil; 
-   
-   private final ModelMapper modelMapper = new ModelMapper();   
-   
-   @GetMapping("/all")
-   public ResponseEntity<Object> getAllTransactions() {
-      return new ResponseEntity<>(transactionService.getAll(), HttpStatus.OK);
-   }
-   
-   @GetMapping
-   public PagedResponse<Transaction> getTransactions( @RequestParam(value = "page", defaultValue = AppConstants.DEFAULT_PAGE_NUMBER) int page,
-                                               				  @RequestParam(value = "size", defaultValue = AppConstants.DEFAULT_PAGE_SIZE) int size,
-														      @RequestParam(value = "sortdir", defaultValue = "1") int sortdir,
-														      @RequestParam(value = "sortfield", defaultValue = "transactionId") String sortfield,
-   															  @RequestParam(value = "searchstring", defaultValue = "") String searchstring) {
-   																  
-       return transactionService.getAllPaged(page, size, sortdir,sortfield,searchstring);
-   }
-   
-   @GetMapping("/{id}")
-   public Transaction getTransactionById(@PathVariable Long id) {
-       return transactionService.findById(id).get();
-   }
-   
-   @PutMapping
-   public ResponseEntity<Object> 
-      updateTransaction(@RequestBody Transaction transaction) {
-      
-	   transactionService.updateTransaction(transaction);
-      return ResponseEntity.ok(new ApiResponse(true, "Transaction is updated successsfully"));
-   }
-   
-   @DeleteMapping("/{id}")
-   public ResponseEntity<Object> delete(@PathVariable("id") Long id) {
-	   transactionService.deleteTransaction(id);
-      return ResponseEntity.ok(new ApiResponse(true, "Transaction is deleted successsfully"));
-   }
-   
-   @PutMapping("/deleteAll")
-   public ResponseEntity<Object> 
-      deleteTransactions(@RequestBody Transaction[] transactions) {
-      
-	   transactionService.deleteTransactions(transactions);
-      return ResponseEntity.ok(new ApiResponse(true, "Transactions are deleted successsfully"));
-   }
-   
-   @PostMapping
-   public ResponseEntity<Object> createTransaction(@RequestBody Transaction transaction) {
-	   transactionService.createTransaction(transaction);
-      return ResponseEntity.ok(new ApiResponse(true, "Transaction is created successsfully"));
-   }
-   	
-   /**
-    * 
-    * @param accountId
-    * @return
-    */
-   @ApiOperation(value = "Retrieve transaction info. Account id to test: 14537780")
-   @GetMapping("/sandbox/{accountId}")
-   public ResponseEntity<Object> getTransactionsByAccountId(@PathVariable Long accountId, 			
-		 @RequestParam(value = "fromAccountingDate", required = true) String fromAccountingDate,
-         @RequestParam(value = "toAccountingDate", required = true)  String toAccountingDate){
-		
+
+	Logger logger = LoggerFactory.getLogger(TransactionController.class);
+
+	@Autowired
+	TransactionService transactionService;
+
+	@Autowired
+	ProxyUtil proxyUtil;
+
+	private final ModelMapper modelMapper = new ModelMapper();
+
+	@GetMapping("/all")
+	public ResponseEntity<Object> getAllTransactions() {
+		return new ResponseEntity<>(transactionService.getAll(), HttpStatus.OK);
+	}
+
+	@GetMapping
+	public PagedResponse<Transaction> getTransactions(
+			@RequestParam(value = "page", defaultValue = AppConstants.DEFAULT_PAGE_NUMBER) int page,
+			@RequestParam(value = "size", defaultValue = AppConstants.DEFAULT_PAGE_SIZE) int size,
+			@RequestParam(value = "sortdir", defaultValue = "1") int sortdir,
+			@RequestParam(value = "sortfield", defaultValue = "transactionId") String sortfield,
+			@RequestParam(value = "searchstring", defaultValue = "") String searchstring) {
+
+		return transactionService.getAllPaged(page, size, sortdir, sortfield, searchstring);
+	}
+
+	@GetMapping("/{id}")
+	public Transaction getTransactionById(@PathVariable Long id) {
+		return transactionService.findById(id).get();
+	}
+
+	@PutMapping
+	public ResponseEntity<Object> updateTransaction(@RequestBody Transaction transaction) {
+
+		transactionService.updateTransaction(transaction);
+		return ResponseEntity.ok(new ApiResponse(true, "Transaction is updated successsfully"));
+	}
+
+	@DeleteMapping("/{id}")
+	public ResponseEntity<Object> delete(@PathVariable("id") Long id) {
+		transactionService.deleteTransaction(id);
+		return ResponseEntity.ok(new ApiResponse(true, "Transaction is deleted successsfully"));
+	}
+
+	@PutMapping("/deleteAll")
+	public ResponseEntity<Object> deleteTransactions(@RequestBody Transaction[] transactions) {
+
+		transactionService.deleteTransactions(transactions);
+		return ResponseEntity.ok(new ApiResponse(true, "Transactions are deleted successsfully"));
+	}
+
+	@PostMapping
+	public ResponseEntity<Object> createTransaction(@RequestBody Transaction transaction) {
+		transactionService.createTransaction(transaction);
+		return ResponseEntity.ok(new ApiResponse(true, "Transaction is created successsfully"));
+	}
+
+	/**
+	 * 
+	 * @param accountId
+	 * @return
+	 */
+	@ApiOperation(value = "Retrieve transaction info. Account id to test: 14537780")
+	@GetMapping("/sandbox/{accountId}")
+	public ResponseEntity<?> getTransactionsByAccountId(@PathVariable Long accountId,
+			@RequestParam(value = "fromAccountingDate", required = true) String fromAccountingDate,
+			@RequestParam(value = "toAccountingDate", required = true) String toAccountingDate) {
+
 		Map<String, String> params = new HashMap<>();
-		if(fromAccountingDate!=null)
-		{
+		if (fromAccountingDate != null) {
 			params.put("fromAccountingDate", fromAccountingDate);
 		}
-		
-		if(fromAccountingDate!=null)
-		{
+
+		if (fromAccountingDate != null) {
 			params.put("toAccountingDate", toAccountingDate);
 		}
-		
 
-		ResponseEntity<SandBoxBaseResponse> response =  proxyUtil.restCall(proxyUtil.buildTransactionsUrl(accountId), HttpMethod.GET, params, null); 
-		return ResponseEntity.ok(response.getBody()); 
-   }
-   
+		Collection<Transaction> transactionList = new ArrayList<Transaction>();	
+		ResponseEntity<SandBoxBaseResponse> result = proxyUtil.restCall(proxyUtil.buildTransactionsUrl(accountId), HttpMethod.GET, params, null); 
+		LinkedHashMap<String, Object> payload = (LinkedHashMap<String, Object>) result.getBody().get(AppConstants.PAYLOAD);
+
+		if(payload!=null) {
+			Collection<LinkedHashMap<String, Object>> lista = (Collection<LinkedHashMap<String, Object>>) payload.get("list");
+			for (Iterator iterator = lista.iterator(); iterator.hasNext();) {
+				LinkedHashMap<String, Object> linkedHashMap = (LinkedHashMap<String, Object>) iterator.next();
+				Transaction t = new Transaction();
+				t = modelMapper.map(linkedHashMap, Transaction.class);
+				transactionList.add(t);
+			}
+			  return ResponseEntity.ok(transactionList); 
+		}	
+		return result;
+	}
+
 }

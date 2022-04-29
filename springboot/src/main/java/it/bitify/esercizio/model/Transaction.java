@@ -35,8 +35,12 @@ import javax.persistence.JoinTable;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.ManyToMany;
+
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.math.BigDecimal;
 
 import it.bitify.esercizio.model.audit.UserDateAudit;
@@ -85,12 +89,26 @@ private String description;
 @ManyToOne
 @JoinColumn(name = "type_id")
 private Type type;
+
 /** Account Relation:  */
 @ManyToOne
 @JoinColumn(name = "account_id")
 @JsonIgnore
 private Account account;
 
+//@JoinColumn(name = "list")
+//private Collection<Transaction> list = new ArrayList<Transaction>(); 
+//
+//public Collection<Transaction> getList() {
+//	if(list.isEmpty()) {
+//		return new ArrayList<Transaction>();
+//	}
+//	return list;
+//}
+//
+//public void setList(Collection<Transaction> list) {
+//	this.list = list;
+//}
 
 public long getTransactionId(){
 	return transactionId;

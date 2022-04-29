@@ -11,4 +11,6 @@ public interface AppConstants {
     
     String PAYLOAD = "payload"; 
     String ERROR = "error"; 
+    String AUTHSCHEMA = "Auth-Schema";
+    String APIKEY = "Api-Key"; 
 }

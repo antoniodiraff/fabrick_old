@@ -9,10 +9,10 @@ public class SandBoxBaseResponse extends LinkedHashMap<String, Object>{
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	
 	String status; 
 	ErrorDetail error; 
 	Object payload;
+
 	
 	public String getStatus() {
 		return status;
@@ -32,8 +32,5 @@ public class SandBoxBaseResponse extends LinkedHashMap<String, Object>{
 	public void setPayload(Object payload) {
 		this.payload = payload;
 	}
-	
-	
-	
-	
+
 }

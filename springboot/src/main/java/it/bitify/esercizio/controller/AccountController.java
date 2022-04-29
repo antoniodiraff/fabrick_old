@@ -55,6 +55,7 @@ import it.bitify.esercizio.dto.PagedResponse;
 import it.bitify.esercizio.dto.SandBoxBaseResponse;
 import it.bitify.esercizio.exception.BadRequestException;
 import it.bitify.esercizio.dto.ApiResponse;
+import it.bitify.esercizio.dto.ErrorDetail;
 import it.bitify.esercizio.util.AppConstants;
 import it.bitify.esercizio.util.ProxyUtil;
 import springfox.documentation.annotations.ApiIgnore;
@@ -143,8 +144,11 @@ Logger logger = LoggerFactory.getLogger(AccountController.class);
     */
    @ApiOperation(value = "Retrieve account info. Account id to test: 14537780")
    @GetMapping("/sandbox/{accountId}")
-   public ResponseEntity<Account> getAccountByAccountId(@PathVariable Long accountId) {
+   public ResponseEntity<?> getAccountByAccountId(@PathVariable Long accountId) {
 		ResponseEntity<SandBoxBaseResponse> response =  proxyUtil.restCall(proxyUtil.buildAccountUrl(accountId), HttpMethod.GET, null, null); 
-	  return ResponseEntity.ok(modelMapper.map(response.getBody().get(AppConstants.PAYLOAD), Account.class)); 
+		if(response.getBody().get(AppConstants.PAYLOAD)!=null) {
+			  return ResponseEntity.ok(modelMapper.map(response.getBody().get(AppConstants.PAYLOAD), Account.class)); 
+		}
+		return response;
    }
 }
