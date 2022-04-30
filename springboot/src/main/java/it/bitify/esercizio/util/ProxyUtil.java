@@ -1,35 +1,23 @@
 package it.bitify.esercizio.util;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
-import org.springframework.util.MultiValueMap;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.client.HttpClientErrorException.BadRequest;
 import org.springframework.web.client.HttpStatusCodeException;
-import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import ch.qos.logback.classic.Logger;
-import it.bitify.esercizio.dto.ErrorDetail;
-import it.bitify.esercizio.dto.MoneyTransferRequest;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import it.bitify.esercizio.dto.SandBoxBaseResponse;
-import it.bitify.esercizio.exception.AppException;
-import it.bitify.esercizio.exception.BadRequestException;
-import it.bitify.esercizio.exception.ResourceNotFoundException;
 import javassist.tools.web.BadHttpRequest;
 
 @Component
@@ -64,6 +52,8 @@ public class ProxyUtil {
 	 * @param toAccountingDate
 	 * @param fromAccountingDate
 	 * @return
+	 * @throws JsonProcessingException 
+	 * @throws JsonMappingException 
 	 * @throws BadHttpRequest
 	 */
 	public ResponseEntity<SandBoxBaseResponse> restCall(String api, HttpMethod httpMethod, Map<String, String> params,
@@ -86,7 +76,6 @@ public class ProxyUtil {
 				url = UriComponentsBuilder.fromHttpUrl(url).queryParam(key, "{" + key + "}").encode().toUriString();
 			}
 		}
-
 		try {
 			ResponseEntity<SandBoxBaseResponse> responseEntity;
 			if (request != null) {
@@ -96,18 +85,27 @@ public class ProxyUtil {
 				responseEntity = restTemplate.exchange(url, httpMethod, new HttpEntity<>("parameters", headers),
 						SandBoxBaseResponse.class, params);
 			}
-
 			return responseEntity;
-
-		} catch (
-
-		HttpStatusCodeException e) {
-			SandBoxBaseResponse response = new SandBoxBaseResponse();
-			response.put(AppConstants.ERROR, new ErrorDetail(e));
-			return new ResponseEntity<SandBoxBaseResponse>(response, e.getStatusCode());
-
+		} catch (HttpStatusCodeException e) {
+			return exception(e); 
 		}
+	}
 
+	/**
+	 * 
+	 * @param e
+	 * @return
+	 */
+	private ResponseEntity<SandBoxBaseResponse> exception(HttpStatusCodeException e) {
+		SandBoxBaseResponse response = new SandBoxBaseResponse();
+		String bodyString = e.getResponseBodyAsString();		
+		ObjectMapper mapper = new ObjectMapper();
+		try {
+			response = mapper.readValue(bodyString, SandBoxBaseResponse.class);
+		} catch (JsonProcessingException e1) {
+			e1.printStackTrace();
+		}			
+		return new ResponseEntity<SandBoxBaseResponse>(response, e.getStatusCode());
 	}
 
 	/**

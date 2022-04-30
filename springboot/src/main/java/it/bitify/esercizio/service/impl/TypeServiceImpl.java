@@ -38,20 +38,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
-import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JasperCompileManager;
-import net.sf.jasperreports.engine.JasperExportManager;
-import net.sf.jasperreports.engine.JasperFillManager;
-import net.sf.jasperreports.engine.JasperPrint;
-import net.sf.jasperreports.engine.JasperReport;
-import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
-import net.sf.jasperreports.engine.export.JRCsvExporter;
-import net.sf.jasperreports.engine.export.ooxml.JRXlsxExporter;
-import net.sf.jasperreports.engine.util.JRSaver;
-import net.sf.jasperreports.export.SimpleExporterInput;
-import net.sf.jasperreports.export.SimpleOutputStreamExporterOutput;
-import net.sf.jasperreports.export.SimpleWriterExporterOutput;
-import net.sf.jasperreports.export.SimpleXlsxReportConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -74,22 +60,6 @@ public class TypeServiceImpl implements TypeService {
    @Autowired
    private TypeRepository typeRepo;
    
-   JasperReport jasperReport;
-   
-   public TypeServiceImpl() {
-		try {
-			// Compile the Jasper report from .jrxml to .japser
-			InputStream typeStream= getClass().getResourceAsStream("/report/jrxml/TypeReport.jrxml");
-			jasperReport= JasperCompileManager.compileReport(typeStream);
-			new File("report").mkdirs();
-			JRSaver.saveObject(jasperReport, "report/typeReport.jasper");
-			logger.debug("typeReport.jasper saved");
-
-		} catch (JRException e) {
-			e.printStackTrace();
-			logger.error("Error--> check the console log");
-		}
-   }
 	
    @Override
    public void createType(Type type) {
@@ -151,77 +121,5 @@ public class TypeServiceImpl implements TypeService {
        return new PagedResponse<>(types.toList(), types.getNumber(),
     		   types.getSize(), types.getTotalElements(), types.getTotalPages(), types.isLast());
    }
-   
-   @Override
-   public void generateReportPdf(HttpServletResponse response) {
-	   logger.debug("Type generateReportPdf");
-		try {
 
-			List<Type> types = typeRepo.findAll();
-			JRBeanCollectionDataSource jrBeanCollectionDataSource = new JRBeanCollectionDataSource(types);
-			Map<String, Object> parameters = new HashMap<>();
-			parameters.put("title", "Type");
-			parameters.put("title_sub", "Relazioni");
-			JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters,
-					jrBeanCollectionDataSource);
-			JasperExportManager.exportReportToPdfStream(jasperPrint, response.getOutputStream());
-			response.setContentType("application/pdf");
-			response.addHeader("Content-Disposition", "inline; filename=Type.pdf;");
-			logger.debug("Done");
-		} catch (Exception e) {
-			e.printStackTrace();
-			logger.error("Error--> check the console log"); 
-		}
-	}
-
-	@Override
-	public void generateReportXls(HttpServletResponse response) {
-		try {
-			JRXlsxExporter exporter = new JRXlsxExporter();
-			List<Type> types = typeRepo.findAll();
-			JRBeanCollectionDataSource jrBeanCollectionDataSource = new JRBeanCollectionDataSource(types);
-			Map<String, Object> parameters = new HashMap<>();
-			parameters.put("title", "Type");
-			parameters.put("title_sub", "Relazioni");
-			JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters,
-					jrBeanCollectionDataSource);
-			exporter.setExporterInput(new SimpleExporterInput(jasperPrint));
-			SimpleXlsxReportConfiguration reportConfig = new SimpleXlsxReportConfiguration();
-			reportConfig.setSheetNames(new String[] { "Type" });
-			exporter.setConfiguration(reportConfig);
-			exporter.setExporterOutput(new SimpleOutputStreamExporterOutput(response.getOutputStream()));
-			response.setHeader("Content-Disposition", "attachment;filename=Type.xlsx");
-	        response.setContentType("application/octet-stream");
-
-			exporter.exportReport();
-		} catch (JRException ex) {
-			logger.error(ex.getMessage());
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-	@Override
-	public void generateReportCsv(HttpServletResponse response) {
-		try {
-			JRCsvExporter exporter = new JRCsvExporter();
-			List<Type> types = typeRepo.findAll();
-			JRBeanCollectionDataSource jrBeanCollectionDataSource = new JRBeanCollectionDataSource(types);
-			Map<String, Object> parameters = new HashMap<>();
-			parameters.put("title", "Type");
-			parameters.put("title_sub", "Relazioni");
-			JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters,
-					jrBeanCollectionDataSource);
-			exporter.setExporterInput(new SimpleExporterInput(jasperPrint));
-			exporter.setExporterOutput(new SimpleWriterExporterOutput(response.getOutputStream()));
-			response.setHeader("Content-Disposition", "attachment;filename=Type.csv");
-	        response.setContentType("application/octet-stream");
-	        exporter.exportReport();
-		} catch (JRException ex) {
-			logger.error(ex.getMessage());
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
 }

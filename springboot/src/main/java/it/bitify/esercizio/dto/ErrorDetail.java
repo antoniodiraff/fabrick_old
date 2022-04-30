@@ -14,6 +14,7 @@ public class ErrorDetail{
     public ErrorDetail(Exception exception) {
         this.exception = exception.getClass().getSimpleName();
         this.details = exception.getMessage();
+    
     }
 
 	public LocalDateTime getTimestamp() {

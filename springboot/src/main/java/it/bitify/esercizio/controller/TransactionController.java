@@ -19,53 +19,40 @@
 package it.bitify.esercizio.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.TransactionTimedOutException;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.RestClientException;
-
-import antlr.MismatchedCharException;
 import io.swagger.annotations.ApiOperation;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 //import org.springframework.security.access.prepost.PreAuthorize;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
-
-import javax.servlet.http.HttpServletResponse;
-
+import java.util.stream.Collectors;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import it.bitify.esercizio.service.TransactionService;
-import it.bitify.esercizio.model.Account;
 import it.bitify.esercizio.model.Transaction;
 import it.bitify.esercizio.dto.PagedResponse;
 import it.bitify.esercizio.dto.SandBoxBaseResponse;
-import it.bitify.esercizio.exception.BadRequestException;
 import it.bitify.esercizio.dto.ApiResponse;
 import it.bitify.esercizio.util.AppConstants;
 import it.bitify.esercizio.util.ProxyUtil;
-import springfox.documentation.annotations.ApiIgnore;
 
 /*******************************************************************************************
  * Created by A. Di Raffaele The Transaction
@@ -150,22 +137,32 @@ public class TransactionController {
 		if (fromAccountingDate != null) {
 			params.put("toAccountingDate", toAccountingDate);
 		}
+		ResponseEntity<SandBoxBaseResponse> result = proxyUtil.restCall(proxyUtil.buildTransactionsUrl(accountId),
+				HttpMethod.GET, params, null);
+		if(result.getBody().get(AppConstants.ERROR)!=null) {
+			return result;
+		}
+		Collection<Transaction> transactionList = getTransactionList(result);
+			return ResponseEntity.ok(new SandBoxBaseResponse().setPayload(transactionList));
+	}
 
-		Collection<Transaction> transactionList = new ArrayList<Transaction>();	
-		ResponseEntity<SandBoxBaseResponse> result = proxyUtil.restCall(proxyUtil.buildTransactionsUrl(accountId), HttpMethod.GET, params, null); 
-		LinkedHashMap<String, Object> payload = (LinkedHashMap<String, Object>) result.getBody().get(AppConstants.PAYLOAD);
+	/**
+	 * 
+	 * @param result
+	 * @return
+	 */
+	private Collection<Transaction> getTransactionList(ResponseEntity<SandBoxBaseResponse> result) {
+		LinkedHashMap<String, Object> payload = (LinkedHashMap<String, Object>) result.getBody()
+				.get(AppConstants.PAYLOAD);
+		Collection<Transaction> transactkionList = new ArrayList<Transaction>();
+		if (!payload.isEmpty()) {
+			List<LinkedHashMap<String, Object>> transactions = (List<LinkedHashMap<String, Object>>) payload
+					.get(AppConstants.LIST);
 
-		if(payload!=null) {
-			Collection<LinkedHashMap<String, Object>> lista = (Collection<LinkedHashMap<String, Object>>) payload.get("list");
-			for (Iterator iterator = lista.iterator(); iterator.hasNext();) {
-				LinkedHashMap<String, Object> linkedHashMap = (LinkedHashMap<String, Object>) iterator.next();
-				Transaction t = new Transaction();
-				t = modelMapper.map(linkedHashMap, Transaction.class);
-				transactionList.add(t);
-			}
-			  return ResponseEntity.ok(transactionList); 
-		}	
-		return result;
+			transactkionList = transactions.stream().map(e -> modelMapper.map(e, Transaction.class))
+					.collect(Collectors.toList());
+		}
+		return transactkionList;
 	}
 
 }

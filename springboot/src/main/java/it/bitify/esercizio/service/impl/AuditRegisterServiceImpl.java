@@ -18,17 +18,9 @@
 ***************************************************************************/
 package it.bitify.esercizio.service.impl;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.Optional;
-
-import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -38,20 +30,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
-import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JasperCompileManager;
-import net.sf.jasperreports.engine.JasperExportManager;
-import net.sf.jasperreports.engine.JasperFillManager;
-import net.sf.jasperreports.engine.JasperPrint;
-import net.sf.jasperreports.engine.JasperReport;
-import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
-import net.sf.jasperreports.engine.export.JRCsvExporter;
-import net.sf.jasperreports.engine.export.ooxml.JRXlsxExporter;
-import net.sf.jasperreports.engine.util.JRSaver;
-import net.sf.jasperreports.export.SimpleExporterInput;
-import net.sf.jasperreports.export.SimpleOutputStreamExporterOutput;
-import net.sf.jasperreports.export.SimpleWriterExporterOutput;
-import net.sf.jasperreports.export.SimpleXlsxReportConfiguration;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -74,22 +53,7 @@ public class AuditRegisterServiceImpl implements AuditRegisterService {
    @Autowired
    private AuditRegisterRepository auditregisterRepo;
    
-   JasperReport jasperReport;
-   
-   public AuditRegisterServiceImpl() {
-		try {
-			// Compile the Jasper report from .jrxml to .japser
-			InputStream auditregisterStream= getClass().getResourceAsStream("/report/jrxml/AuditRegisterReport.jrxml");
-			jasperReport= JasperCompileManager.compileReport(auditregisterStream);
-			new File("report").mkdirs();
-			JRSaver.saveObject(jasperReport, "report/auditregisterReport.jasper");
-			logger.debug("auditregisterReport.jasper saved");
 
-		} catch (JRException e) {
-			e.printStackTrace();
-			logger.error("Error--> check the console log");
-		}
-   }
 	
    @Override
    public void createAuditRegister(AuditRegister auditregister) {

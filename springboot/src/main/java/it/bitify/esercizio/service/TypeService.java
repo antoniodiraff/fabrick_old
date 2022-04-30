@@ -37,7 +37,4 @@ public interface TypeService {
    public abstract Optional<Type> findById(String id);
    public abstract Collection<Type> getAll();
    public abstract PagedResponse<Type> getAllPaged(int page, int size, int sortDirection,String sortField,String searchString);
-   public abstract void generateReportPdf(HttpServletResponse response);
-   public abstract void generateReportXls(HttpServletResponse response);
-   public abstract void generateReportCsv(HttpServletResponse response);
 }

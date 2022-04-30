@@ -10,7 +10,10 @@ public interface AppConstants {
     int MAX_PAGE_SIZE = 150;
     
     String PAYLOAD = "payload"; 
-    String ERROR = "error"; 
+    String ERROR = "errors"; 
+    String LIST = "list"; 
+
     String AUTHSCHEMA = "Auth-Schema";
-    String APIKEY = "Api-Key"; 
+    String APIKEY = "Api-Key";
+	String STATUS = "status"; 
 }

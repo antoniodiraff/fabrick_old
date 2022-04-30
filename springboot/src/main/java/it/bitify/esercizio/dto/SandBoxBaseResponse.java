@@ -1,36 +1,22 @@
 package it.bitify.esercizio.dto;
 
+import java.util.Collection;
 import java.util.LinkedHashMap;
 
-public class SandBoxBaseResponse extends LinkedHashMap<String, Object>{
+import it.bitify.esercizio.model.Transaction;
+import it.bitify.esercizio.util.AppConstants;
+
+public class SandBoxBaseResponse extends LinkedHashMap<String, Object> {
 
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
-	
-	String status; 
-	ErrorDetail error; 
-	Object payload;
+	private static final long serialVersionUID = -1811417593508757374L;
 
-	
-	public String getStatus() {
-		return status;
-	}
-	public void setStatus(String status) {
-		this.status = status;
-	}
-	public ErrorDetail getError() {
-		return error;
-	}
-	public void setError(ErrorDetail error) {
-		this.error = error;
-	}
-	public Object getPayload() {
-		return payload;
-	}
-	public void setPayload(Object payload) {
-		this.payload = payload;
+	public SandBoxBaseResponse setPayload(Collection<Transaction> transactionList) {
+		this.put(AppConstants.STATUS, "OK"); 
+		this.put(AppConstants.PAYLOAD, transactionList); 
+		return this;
 	}
 
 }

@@ -1,8 +1,8 @@
 package it.bitify.esercizio.dto;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 
-import com.ibm.icu.math.BigDecimal;
 
 public class MoneyTransferRequest implements Serializable{
 
