@@ -3,6 +3,8 @@ package it.bitify.esercizio.util;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -17,11 +19,16 @@ import org.springframework.web.util.UriComponentsBuilder;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import it.bitify.esercizio.controller.AccountController;
 import it.bitify.esercizio.dto.SandBoxBaseResponse;
 import javassist.tools.web.BadHttpRequest;
 
 @Component
 public class ProxyUtil {
+	
+	Logger logger = LoggerFactory.getLogger(ProxyUtil.class);
+
 
 	@Value("${fabrick.baseurl}")
 	public String baseurl;
@@ -77,6 +84,7 @@ public class ProxyUtil {
 			}
 		}
 		try {
+			logger.debug("Request: "+api);
 			ResponseEntity<SandBoxBaseResponse> responseEntity;
 			if (request != null) {
 				HttpEntity<Object> requestEntity = new HttpEntity<>(request, headers);
@@ -87,6 +95,7 @@ public class ProxyUtil {
 			}
 			return responseEntity;
 		} catch (HttpStatusCodeException e) {
+			logger.error("Error requesting: "+api);
 			return exception(e); 
 		}
 	}

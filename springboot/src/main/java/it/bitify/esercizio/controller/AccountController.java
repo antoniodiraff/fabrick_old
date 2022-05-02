@@ -71,7 +71,7 @@ public class AccountController {
 	
    private static final String String = null;
 
-Logger logger = LoggerFactory.getLogger(AccountController.class);
+   Logger logger = LoggerFactory.getLogger(AccountController.class);
 	
    @Autowired
    AccountService accountService;
@@ -149,6 +149,6 @@ Logger logger = LoggerFactory.getLogger(AccountController.class);
 		if(response.getBody().get(AppConstants.ERROR)!=null) {
 			return response;
 		}
-		return ResponseEntity.ok(modelMapper.map(response.getBody().get(AppConstants.PAYLOAD), Account.class)); 
+		return ResponseEntity.ok(modelMapper.map(response.getBody(), SandBoxBaseResponse.class)); 
    }
 }

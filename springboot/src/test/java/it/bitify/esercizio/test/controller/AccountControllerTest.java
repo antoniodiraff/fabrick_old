@@ -45,13 +45,24 @@ public class AccountControllerTest {
   @Autowired
   private MockMvc mvc;
   
-  /*@WithMockUser(username = "admin", authorities = { "account_create" })*/
+  @Test
+  public void getAccount() throws Exception 
+  {
+	  String testAccountId="14537780";
+	  mvc.perform( MockMvcRequestBuilders 
+        .get("/api/account/sandbox/"+testAccountId)
+        .accept(MediaType.APPLICATION_JSON))
+        .andDo(print())
+        .andExpect(status().isOk())
+	    .andExpect(MockMvcResultMatchers.jsonPath("$.payload").exists())
+	    .andExpect(MockMvcResultMatchers.jsonPath("$.payload.accountId").isNotEmpty());
+  }
+  
   @Test
   public void create() throws Exception 
   {
-    String element="{}";
-    
-	  
+	String element="{\"accountId\":\"1\"}";
+ 
     mvc.perform( MockMvcRequestBuilders
         .post("/api/account")
         .content(element)

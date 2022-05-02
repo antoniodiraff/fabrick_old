@@ -60,8 +60,10 @@ public class AccountServiceImpl implements AccountService {
    }
    @Override
    public void updateAccount(Account account) {
-	   for (int i = 0; i < account.getTransactions().size(); i++) {
-		   account.getTransactions().get(i).setAccount(account);
+	   if(account.getTransactions()!=null) {
+		   for (int i = 0; i < account.getTransactions().size(); i++) {
+			   account.getTransactions().get(i).setAccount(account);
+		   }
 	   }
 	   accountRepo.save(account);
 	   logger.debug("Account updated");

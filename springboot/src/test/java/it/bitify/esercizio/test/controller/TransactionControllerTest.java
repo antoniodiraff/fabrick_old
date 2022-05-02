@@ -35,6 +35,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 /*
 import org.springframework.security.test.context.support.WithMockUser;
 */
+import org.springframework.web.bind.annotation.GetMapping;
 
 
 @SpringBootTest
@@ -45,71 +46,19 @@ public class TransactionControllerTest {
   @Autowired
   private MockMvc mvc;
   
-  /*@WithMockUser(username = "admin", authorities = { "transaction_create" })*/
   @Test
-  public void create() throws Exception 
+  public void getTransactions() throws Exception 
   {
-    String element="{}";
-    
-	  
-    mvc.perform( MockMvcRequestBuilders
-        .post("/api/transaction")
-        .content(element)
-        .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON))
-        .andDo(print())
-        .andExpect(status().isOk());
-  }
-  
-  /*@WithMockUser(username = "admin", authorities = { "transaction_update" })*/
-  @Test
-  public void update() throws Exception 
-  {
-    String element="{\"transactionId\":\"1\"}";
-    
-	  
-    mvc.perform( MockMvcRequestBuilders
-        .put("/api/transaction")
-        .content(element)
-        .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON))
-        .andDo(print())
-        .andExpect(status().isOk());
-  }
-  
-  /*@WithMockUser(username = "admin", authorities = { "transaction_list_paged" })*/
-  @Test
-  public void getAllPaginated() throws Exception 
-  {
-    mvc.perform( MockMvcRequestBuilders
-        .get("/api/transaction")
+	  String testAccountId="14537780";
+	  mvc.perform( MockMvcRequestBuilders 
+        .get("/api/transaction/sandbox/"+testAccountId)
+        .param("fromAccountingDate", "2019-02-01")
+        .param("toAccountingDate", "2019-04-04")
         .accept(MediaType.APPLICATION_JSON))
         .andDo(print())
-        .andExpect(status().isOk());
-        //.andExpect(MockMvcResultMatchers.jsonPath("$.content").exists())
-        //.andExpect(MockMvcResultMatchers.jsonPath("$.content[*].id").isNotEmpty());
+        .andExpect(status().isOk())
+	    .andExpect(MockMvcResultMatchers.jsonPath("$.payload").exists());
   }
   
-  /*@WithMockUser(username = "admin", authorities = { "transaction_list_all" })*/
-  @Test
-  public void getAll() throws Exception 
-  {
-    mvc.perform( MockMvcRequestBuilders
-        .get("/api/transaction/all")
-        .accept(MediaType.APPLICATION_JSON))
-        .andDo(print())
-        .andExpect(status().isOk());
-        //.andExpect(MockMvcResultMatchers.jsonPath("$").exists())
-        //.andExpect(MockMvcResultMatchers.jsonPath("$[*].id").isNotEmpty());
-  }
-  
-  /*@WithMockUser(username = "admin", authorities = { "transaction_delete" })*/
-  @Test
-  public void delete() throws Exception 
-  {
-    mvc.perform( MockMvcRequestBuilders
-        .delete("/api/transaction/11")
-        .accept(MediaType.APPLICATION_JSON))
-        .andDo(print())
-        .andExpect(status().isOk());
-  }
  
 }
