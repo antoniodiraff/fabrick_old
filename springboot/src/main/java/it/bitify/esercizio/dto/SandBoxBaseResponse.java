@@ -13,10 +13,25 @@ public class SandBoxBaseResponse extends LinkedHashMap<String, Object> {
 	 */
 	private static final long serialVersionUID = -1811417593508757374L;
 
-	public SandBoxBaseResponse setPayload(Collection<Transaction> transactionList) {
+	/**
+	 * 
+	 * @param list
+	 * @return
+	 */
+	public SandBoxBaseResponse setPayload(Collection<Object> list) {
 		this.put(AppConstants.STATUS, "OK"); 
-		this.put(AppConstants.PAYLOAD, transactionList); 
+		this.put(AppConstants.PAYLOAD, list); 
 		return this;
 	}
 
+	/**
+	 * 
+	 * @param obj
+	 * @return
+	 */
+	public SandBoxBaseResponse setPayload(Object obj) {
+		this.put(AppConstants.STATUS, "OK"); 
+		this.put(AppConstants.PAYLOAD, obj); 
+		return this;
+	}
 }

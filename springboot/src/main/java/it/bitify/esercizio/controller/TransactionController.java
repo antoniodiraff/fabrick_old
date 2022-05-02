@@ -117,7 +117,12 @@ public class TransactionController {
 		transactionService.createTransaction(transaction);
 		return ResponseEntity.ok(new ApiResponse(true, "Transaction is created successsfully"));
 	}
-
+	
+	@PostMapping("/insert")
+	public ResponseEntity<Object> createTransactions(@RequestBody Transaction[] transactions) {
+		transactionService.createTransactions(transactions);
+		return ResponseEntity.ok(new ApiResponse(true, "Transactions are created successsfully"));
+	}
 	/**
 	 * 
 	 * @param accountId
@@ -152,17 +157,14 @@ public class TransactionController {
 	 * @return
 	 */
 	private Collection<Transaction> getTransactionList(ResponseEntity<SandBoxBaseResponse> result) {
-		LinkedHashMap<String, Object> payload = (LinkedHashMap<String, Object>) result.getBody()
-				.get(AppConstants.PAYLOAD);
-		Collection<Transaction> transactkionList = new ArrayList<Transaction>();
+		LinkedHashMap<String, Object> payload = (LinkedHashMap<String, Object>) result.getBody().get(AppConstants.PAYLOAD);
+		Collection<Transaction> transactionList = new ArrayList<Transaction>();
 		if (!payload.isEmpty()) {
-			List<LinkedHashMap<String, Object>> transactions = (List<LinkedHashMap<String, Object>>) payload
-					.get(AppConstants.LIST);
-
-			transactkionList = transactions.stream().map(e -> modelMapper.map(e, Transaction.class))
-					.collect(Collectors.toList());
+			List<LinkedHashMap<String, Object>> transactions = (List<LinkedHashMap<String, Object>>) payload.get(AppConstants.LIST);
+			transactionList = transactions.stream().map(e -> modelMapper.map(e, Transaction.class)).collect(Collectors.toList());
+//			transactionList.forEach(e -> transactionService.createTransaction(e));
 		}
-		return transactkionList;
+		return transactionList;
 	}
 
 }

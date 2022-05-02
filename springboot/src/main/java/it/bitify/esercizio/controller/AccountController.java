@@ -149,6 +149,6 @@ Logger logger = LoggerFactory.getLogger(AccountController.class);
 		if(response.getBody().get(AppConstants.ERROR)!=null) {
 			return response;
 		}
-		return ResponseEntity.ok(modelMapper.map(response.getBody().get(AppConstants.PAYLOAD), Account.class)); 
+		return ResponseEntity.ok(new SandBoxBaseResponse().setPayload(modelMapper.map(response.getBody().get(AppConstants.PAYLOAD), Account.class))); 
    }
 }

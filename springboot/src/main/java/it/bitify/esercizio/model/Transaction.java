@@ -57,7 +57,7 @@ public class Transaction {
 	    
 /** transactionId: The ID of the transaction. This is a unique ID for the transaction, valid to identify a transaction across all of your accounts provided by Banca Sella. */
 @Id
-@GeneratedValue(strategy = GenerationType.IDENTITY)
+//@GeneratedValue(strategy = GenerationType.IDENTITY)
 @Column(name="transaction_id")
 private long transactionId;
 
@@ -95,20 +95,6 @@ private Type type;
 @JoinColumn(name = "account_id")
 @JsonIgnore
 private Account account;
-
-//@JoinColumn(name = "list")
-//private Collection<Transaction> list = new ArrayList<Transaction>(); 
-//
-//public Collection<Transaction> getList() {
-//	if(list.isEmpty()) {
-//		return new ArrayList<Transaction>();
-//	}
-//	return list;
-//}
-//
-//public void setList(Collection<Transaction> list) {
-//	this.list = list;
-//}
 
 public long getTransactionId(){
 	return transactionId;
