@@ -19,8 +19,8 @@ public class SandBoxBaseResponse extends LinkedHashMap<String, Object> {
 	 * @return
 	 */
 	public SandBoxBaseResponse setPayload(Collection<Object> list) {
-		this.put(AppConstants.STATUS, "OK"); 
-		this.put(AppConstants.PAYLOAD, list); 
+		this.put(AppConstants.STATUS, "OK");
+		this.put(AppConstants.PAYLOAD, list);
 		return this;
 	}
 
@@ -30,8 +30,19 @@ public class SandBoxBaseResponse extends LinkedHashMap<String, Object> {
 	 * @return
 	 */
 	public SandBoxBaseResponse setPayload(Object obj) {
-		this.put(AppConstants.STATUS, "OK"); 
-		this.put(AppConstants.PAYLOAD, obj); 
+		this.put(AppConstants.STATUS, "OK");
+		this.put(AppConstants.PAYLOAD, obj);
+		return this;
+	}
+
+	/**
+	 * 
+	 * @param obj
+	 * @return
+	 */
+	public SandBoxBaseResponse setError(Object obj) {
+		this.put(AppConstants.STATUS, "KO");
+		this.put(AppConstants.ERROR, obj);
 		return this;
 	}
 }

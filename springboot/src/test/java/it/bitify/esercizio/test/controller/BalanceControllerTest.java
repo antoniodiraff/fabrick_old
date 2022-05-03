@@ -41,23 +41,22 @@ import org.springframework.web.bind.annotation.GetMapping;
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
-public class TransactionControllerTest {
+public class BalanceControllerTest {
  
   @Autowired
   private MockMvc mvc;
   
   @Test
-  public void getTransactions() throws Exception 
+  public void getBalance() throws Exception 
   {
 	  String testAccountId="14537780";
 	  mvc.perform( MockMvcRequestBuilders 
-        .get("/api/transaction/sandbox/"+testAccountId)
-        .param("fromAccountingDate", "2019-02-01")
-        .param("toAccountingDate", "2019-04-04")
+        .get("/api/balance/sandbox/"+testAccountId)
         .accept(MediaType.APPLICATION_JSON))
         .andDo(print())
         .andExpect(status().isOk())
-	    .andExpect(MockMvcResultMatchers.jsonPath("$.payload").exists());
+	    .andExpect(MockMvcResultMatchers.jsonPath("$.payload").exists())
+	    .andExpect(MockMvcResultMatchers.jsonPath("$.payload.balance").isNotEmpty());
   }
   
  
