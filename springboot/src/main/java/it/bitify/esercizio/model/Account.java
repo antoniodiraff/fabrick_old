@@ -53,7 +53,7 @@ public class Account {
 	    
 /** accountId: The ID of the account. */
 @Id
-@GeneratedValue(strategy = GenerationType.IDENTITY)
+//@GeneratedValue(strategy = GenerationType.IDENTITY)
 @Column(name="account_id")
 private long accountId;
 

@@ -12,7 +12,10 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.HttpStatusCodeException;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -22,13 +25,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import it.bitify.esercizio.controller.AccountController;
 import it.bitify.esercizio.dto.SandBoxBaseResponse;
+import it.bitify.esercizio.exception.BadRequestException;
 import javassist.tools.web.BadHttpRequest;
 
 @Component
 public class ProxyUtil {
-	
-	Logger logger = LoggerFactory.getLogger(ProxyUtil.class);
 
+	Logger logger = LoggerFactory.getLogger(ProxyUtil.class);
 
 	@Value("${fabrick.baseurl}")
 	public String baseurl;
@@ -59,8 +62,8 @@ public class ProxyUtil {
 	 * @param toAccountingDate
 	 * @param fromAccountingDate
 	 * @return
-	 * @throws JsonProcessingException 
-	 * @throws JsonMappingException 
+	 * @throws JsonProcessingException
+	 * @throws JsonMappingException
 	 * @throws BadHttpRequest
 	 */
 	public ResponseEntity<SandBoxBaseResponse> restCall(String api, HttpMethod httpMethod, Map<String, String> params,
@@ -84,7 +87,7 @@ public class ProxyUtil {
 			}
 		}
 		try {
-			logger.debug("Request: "+api);
+			logger.debug("Request: " + api);
 			ResponseEntity<SandBoxBaseResponse> responseEntity;
 			if (request != null) {
 				HttpEntity<Object> requestEntity = new HttpEntity<>(request, headers);
@@ -95,8 +98,11 @@ public class ProxyUtil {
 			}
 			return responseEntity;
 		} catch (HttpStatusCodeException e) {
-			logger.error("Error requesting: "+api);
-			return exception(e); 
+			logger.error("Error requesting: " + api);
+			return exception(e);
+		}
+		catch (RestClientException e) {
+			throw new BadRequestException(e.getMessage(), e.getCause());
 		}
 	}
 
@@ -107,13 +113,13 @@ public class ProxyUtil {
 	 */
 	private ResponseEntity<SandBoxBaseResponse> exception(HttpStatusCodeException e) {
 		SandBoxBaseResponse response = new SandBoxBaseResponse();
-		String bodyString = e.getResponseBodyAsString();		
+		String bodyString = e.getResponseBodyAsString();
 		ObjectMapper mapper = new ObjectMapper();
 		try {
 			response = mapper.readValue(bodyString, SandBoxBaseResponse.class);
 		} catch (JsonProcessingException e1) {
 			e1.printStackTrace();
-		}			
+		}
 		return new ResponseEntity<SandBoxBaseResponse>(response, e.getStatusCode());
 	}
 

@@ -29,6 +29,7 @@ import java.util.Map;
 import java.util.Optional;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -53,6 +54,7 @@ import it.bitify.esercizio.repository.TransactionRepository;
  * The Transaction Service Impl
  */
 @Service
+@Transactional
 public class TransactionServiceImpl implements TransactionService {
 	
    Logger logger = LoggerFactory.getLogger(TransactionServiceImpl.class);
@@ -66,6 +68,14 @@ public class TransactionServiceImpl implements TransactionService {
 	   transactionRepo.save(transaction);
 	   logger.debug("Transaction created");
    }
+   
+   @Override
+   public void createTransactions(Transaction[] transactions) {
+		for (int i = 0; i < transactions.length; i++) {
+			createTransaction(transactions[i]);
+		}
+   }
+   
    @Override
    public void updateTransaction(Transaction transaction) {
 	   

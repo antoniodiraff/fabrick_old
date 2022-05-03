@@ -49,7 +49,7 @@ import it.bitify.esercizio.model.audit.UserDateAudit;
  */
 @Entity
 @Table(name = "TYPE")
-public class Type extends UserDateAudit {
+public class Type{
 	    
 /** enumeration: add comment...  */
 @Id

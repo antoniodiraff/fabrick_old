@@ -37,4 +37,5 @@ public interface TransactionService {
    public abstract Optional<Transaction> findById(Long id);
    public abstract Collection<Transaction> getAll();
    public abstract PagedResponse<Transaction> getAllPaged(int page, int size, int sortDirection,String sortField,String searchString);
+   void createTransactions(Transaction[] transactions);
 }

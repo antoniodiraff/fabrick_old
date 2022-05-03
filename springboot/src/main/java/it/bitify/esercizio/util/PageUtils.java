@@ -1,7 +1,6 @@
 package it.bitify.esercizio.util;
 
 import it.bitify.esercizio.exception.BadRequestException;
-import it.bitify.esercizio.util.AppConstants;
 
 /*******************************************************************************************
  * Created by A. Di Raffaele.
