@@ -19,31 +19,21 @@
 package it.bitify.esercizio.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.RestClientException;
-
-import antlr.MismatchedCharException;
 import io.swagger.annotations.ApiOperation;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 //import org.springframework.security.access.prepost.PreAuthorize;
-
-import java.util.LinkedHashMap;
-
-import javax.servlet.http.HttpServletResponse;
 
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
@@ -56,7 +46,6 @@ import it.bitify.esercizio.dto.SandBoxBaseResponse;
 import it.bitify.esercizio.dto.ApiResponse;
 import it.bitify.esercizio.util.AppConstants;
 import it.bitify.esercizio.util.ProxyUtil;
-import springfox.documentation.annotations.ApiIgnore;
 
 /*******************************************************************************************
  * Created by A. Di Raffaele The Account

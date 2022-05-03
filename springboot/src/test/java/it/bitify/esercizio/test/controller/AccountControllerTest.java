@@ -71,20 +71,7 @@ public class AccountControllerTest {
         .andExpect(status().isOk());
   }
   
-  /*@WithMockUser(username = "admin", authorities = { "account_update" })*/
-  @Test
-  public void update() throws Exception 
-  {
-    String element="{\"accountId\":\"1\"}";
-    
-	  
-    mvc.perform( MockMvcRequestBuilders
-        .put("/api/account")
-        .content(element)
-        .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON))
-        .andDo(print())
-        .andExpect(status().isOk());
-  }
+ 
   
   /*@WithMockUser(username = "admin", authorities = { "account_list_paged" })*/
   @Test

@@ -70,11 +70,6 @@
 		    <groupId>com.fasterxml.jackson.core</groupId>
 		    <artifactId>jackson-annotations</artifactId>
 		</dependency>
-<!-- 		<dependency>
-		    <groupId>net.sf.jasperreports</groupId>
-		    <artifactId>jasperreports</artifactId>
-		    <version>6.4.0</version>
-		</dependency> -->
 		<dependency>
 		    <groupId>io.springfox</groupId>
 		    <artifactId>springfox-swagger2</artifactId>
@@ -106,13 +101,6 @@
 		</dependency>
 	</dependencies>
 	
-<!-- 	<repositories>
-		<repository>
-			<id>jaspersoft-third-party</id>
-			<url>https://jaspersoft.jfrog.io/jaspersoft/third-party-ce-artifacts/</url>
-		</repository>
-	</repositories> -->
-
 	<build>
 		<plugins>
 			<plugin>

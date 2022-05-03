@@ -21,24 +21,12 @@ package it.bitify.esercizio.model;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
-import javax.persistence.CascadeType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Column;
-import javax.validation.constraints.NotBlank;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
-//optional
-import javax.persistence.OneToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.JoinTable;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.ManyToMany;
 import java.util.Date;
-import java.util.List;
-import java.math.BigDecimal;
-
 import it.bitify.esercizio.model.audit.UserDateAudit;
 //import it.bitify.esercizio.security.model.SecUser;
 
@@ -51,6 +39,11 @@ import it.bitify.esercizio.model.audit.UserDateAudit;
 @Table(name = "AUDIT_REGISTER")
 public class AuditRegister extends UserDateAudit {
 	    
+/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 /** auditId: Register Audit Id */
 @Id
 @GeneratedValue(strategy = GenerationType.IDENTITY)

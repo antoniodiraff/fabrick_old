@@ -162,7 +162,6 @@ public class TransactionController {
 		if (!payload.isEmpty()) {
 			List<LinkedHashMap<String, Object>> transactions = (List<LinkedHashMap<String, Object>>) payload.get(AppConstants.LIST);
 			transactionList = transactions.stream().map(e -> modelMapper.map(e, Transaction.class)).collect(Collectors.toList());
-//			transactionList.forEach(e -> transactionService.createTransaction(e));
 		}
 		return transactionList;
 	}
