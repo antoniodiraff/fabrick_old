@@ -97,7 +97,7 @@ public class MoneyTransferControllerTest {
         .content(element)
         .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON))
         .andDo(print())
-        .andExpect(status().isOk())
+        .andExpect(status().isBadRequest())
         .andExpect(MockMvcResultMatchers.jsonPath("$.payload").exists());
   }
   
