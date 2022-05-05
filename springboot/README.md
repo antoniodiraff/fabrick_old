@@ -9,13 +9,40 @@ Application that allows you to manage the following operations on the account:
 1. [General Info](#general-info)
 2. [Requirements](#requirements)
 3. [Technologies](#technologies)
-4. [Installation](#installation)
-5. [Running the application locally](#running-the-application-locally)
-6. [Collaboration](#collaboration)
-7. [FAQs](#faqs)
+4. [Running the application locally](#running-the-application-locally)
+5. [Collaboration](#collaboration)
+6. [FAQs](#faqs)
 
 ### General Info
-Write down the general informations of your project. It is worth to always put a project status in the Readme file. This is where you can add it. 
+
+Credentials and inputs
+
+The exercise must be developed using the Sandbox environment with the following credentials:
+
+BaseUrl: 		https://sandbox.platfr.io
+Auth-Schema: 	S2S
+Api-Key: 		*****************************
+Id chiave: 		3202
+accountId: 		14537780
+
+Properties / Application constants
+* {accountId}: Long, is the reference account number, in the API it is always indicated as {accountId}, use value 14537780
+
+Operations: 
+* Operation: API balance reading: 
+
+	https://docs.fabrick.com/platform/apis/gbs-banking-account-cash-v4.0 
+	Output: View the balance
+
+* Operation: Transfer API:
+
+	API: https://docs.fabrick.com/platform/apis/gbs-banking-payments-moneyTransfers-v4.0
+	Output:Status of the operation, the transfer will result in a KO due to a limitation of the test account. The expected output must be: "code": "API000", "description": "Technical error The BP049 condition is not provided for the account id 14537780"
+
+* Operation: Read API Transactions:
+
+	 https://docs.fabrick.com/platform/apis/gbs-banking-account-cash-v4.0
+	 Output: List of transactions, transactions are present in the suggested dates on the example.
 
 ### Requirements
 
@@ -26,19 +53,12 @@ For building and running the application you need:
 
 ## Technologies
 
-***
 A list of technologies used within the project:
 * [Spring Boot](https://spring.io/projects/spring-boot): Version 2.5.6
 * [Maven](https://maven.apache.org/): Version 3.6.1
 * [Model mapper](http://modelmapper.org/user-manual/spring-integration/): Version 2.4.4
 * [Jackson Annotation](https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-annotations) Version 2.12
 
-## Installation
-
-***
-A little intro about the installation.
-```
-$ git clone 
 
 ## Running the application locally
 
@@ -51,23 +71,11 @@ mvn spring-boot:run
 ```
 
 ## Collaboration
-***
-Give instructions on how to collaborate with your project.
-> Maybe you want to write a quote in this part. 
-> It should go over several rows?
-> This is how you do it.
+
+...
 
 ## FAQs
-***
-A list of frequently asked questions
-1. **This is a question in bold**
-Answer of the first question with _italic words_. 
-2. __Second question in bold__ 
-To answer this question we use an unordered list:
-* First point
-* Second Point
-* Third point
-3. **Third question in bold**
-Answer of the third question with *italic words*.
 
+1. **Question**
 
+	Answer of the first question with _italic words_. 
